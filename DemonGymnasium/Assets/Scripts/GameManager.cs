@@ -7,12 +7,14 @@ public class GameManager : MonoBehaviour {
 
 	public float cameraMoveSpeed;
 	public float cameraTesselationRate;
+	public float cameraTesselationTermination;
 	public int monsterActionsPerTurn;
 	public int playerActionsPerTurn;
 
 	public int monsterRange;//TODO move to monster class? Might make sense here though
 
-	public Vector3 playerCameraPosition, playerCameraRotation, monsterCameraPosition, monsterCameraRotation;
+	public Vector3 playerCameraPosition, playerCameraRotation, monsterCameraPosition, monsterCameraRotation;//initial camera positioning per side
+	public float playerSpriteRotation, monsterSpriteRotation;//the static y-component of the sprite rotations
 
 	private bool isHumanTurn;
 	private Entity selectedObject;//the currently selected player/monster(/obstacle)
@@ -37,10 +39,20 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		if (cameraInTransition) {
 			mainCameraTransform.position += (targetPosition - mainCameraTransform.position) * cameraTesselationRate;
-			mainCameraTransform.LookAt(new Vector3(generator.height/2, -5, generator.width/2));
+			mainCameraTransform.LookAt(new Vector3(generator.height/2, -5.05f, generator.width/2));
 
-			if((targetPosition - mainCameraTransform.position).magnitude < 1) {
-				cameraInTransition = false;
+			if((targetPosition - mainCameraTransform.position).magnitude < cameraTesselationTermination) {
+				float dist;
+				if (isHumanTurn) {
+					mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * cameraTesselationRate;
+					dist = (playerCameraRotation - mainCameraTransform.eulerAngles).magnitude;
+				} else {
+					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * cameraTesselationRate;
+					dist = (monsterCameraRotation - mainCameraTransform.eulerAngles).magnitude;
+				}
+				if (dist < cameraTesselationTermination) {
+					cameraInTransition = false;
+				}
 			}
 
 		} else {
@@ -57,6 +69,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public Vector3 getSpriteRotation() {
+		if (isHumanTurn) {
+			return new Vector3(360 - mainCameraTransform.eulerAngles.x, playerSpriteRotation, 0);
+		} else {
+			return new Vector3(mainCameraTransform.eulerAngles.x, monsterSpriteRotation, 0);
+		}
+	}
 
 
 	public void selectPlayer(Player player) {
