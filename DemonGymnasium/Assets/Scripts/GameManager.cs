@@ -57,16 +57,14 @@ public class GameManager : MonoBehaviour {
 			}
 
 		} else {
-			//camera controls
-			if (Input.GetKey (KeyCode.UpArrow)) {
-				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z + cameraMoveSpeed);
-			} else if (Input.GetKey (KeyCode.DownArrow)) {
-				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z - cameraMoveSpeed);
-			} else if (Input.GetKey (KeyCode.RightArrow)) {
-				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x + cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
-			} else if (Input.GetKey (KeyCode.LeftArrow)) {
-				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x - cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
-			}
+            float hInput = Input.GetAxisRaw("Horizontal");
+            float vInput = Input.GetAxisRaw("Vertical");
+
+            Vector3 fwd = new Vector3(mainCameraTransform.forward.x, 0, mainCameraTransform.forward.z);
+            Vector3 right = new Vector3(mainCameraTransform.right.x, 0, mainCameraTransform.right.z);
+            Vector3 goalPosition = (fwd * vInput + right * hInput) * 10;
+            mainCameraTransform.position = Vector3.MoveTowards(mainCameraTransform.position, goalPosition, Time.deltaTime * cameraMoveSpeed);
+
 		}
 	}
 
