@@ -4,6 +4,8 @@ using System.Collections;
 public class PlayerModal : MonoBehaviour
 {
 
+    public GameObject[] subModals;
+
     // Use this for initialization
     void Start()
     {
@@ -16,10 +18,15 @@ public class PlayerModal : MonoBehaviour
 
     }
 
+    void OnMouseEnter()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
+
     public void attackButtonClicked()
     {
         Debug.Log("open");
-        GetComponentInChildren<Canvas>().gameObject.SetActive(true);//a hack, will not work with multiple sub-modals
+        subModals[0].SetActive(true);
     }
 
     public void moveButtonClicked()

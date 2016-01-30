@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Button : MonoBehaviour {
 
 	public void OnMouseOver()
     {
-        //Debug.Log("Enter");
+        GetComponent<Image>().color = Color.gray;
     }
 
     public void OnMouseExit()
     {
-        //Debug.Log("Exit");
+        GetComponent<Image>().color = Color.black;
     }
 }
