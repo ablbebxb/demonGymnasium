@@ -11,7 +11,8 @@ public class Player : Entity {
 	private int HP;
 
 	// Use this for initialization
-	void Start () {
+	new void Start () {
+		base.Start ();
 		HP = startingHP;
 	}
 	

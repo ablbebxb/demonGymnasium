@@ -21,16 +21,19 @@ public abstract class Entity : MonoBehaviour {
 	private int actionPoints;
 	private bool isMoving;//true while the entity is moving from one space to another
 	private Vector3 target;//the target space the entity is moving to
+	private Transform mainCameraTransform;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		actionPoints = startingActionPoints;
 		isMoving = false;
 		target = Vector3.zero;
+		mainCameraTransform = GameObject.FindGameObjectWithTag ("MainCamera").transform;
 	}
 	
 	// Update is called once per frame
 	public void Update () {
+		this.transform.LookAt(mainCameraTransform.position);
 		if (isMoving) {
 			this.transform.position += (target - this.transform.position).normalized * 0.1f;
 
@@ -43,10 +46,15 @@ public abstract class Entity : MonoBehaviour {
 
 	public abstract void damage ();
 
+	public bool hasActionsLeft() {
+		return actionPoints > 0;
+	}
+
 	private void move(Vector3 dir) {
 		if (isMoving) {
 			return;
 		}
+		actionPoints--;
 		isMoving = true;
 		target = this.transform.position + dir;
 	}
