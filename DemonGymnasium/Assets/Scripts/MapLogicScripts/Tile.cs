@@ -15,6 +15,7 @@ public class Tile : MonoBehaviour {
     {
         this.x = x;
         this.y = y;
+		transform.position = new Vector3 (x, 0, y);
     }
 
     public int getX()
