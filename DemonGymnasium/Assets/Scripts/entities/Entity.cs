@@ -20,6 +20,6 @@ public abstract class Entity : MonoBehaviour {
 	
 	}
 
-	public abstract bool damage ();
+	public abstract void damage ();
 
 }

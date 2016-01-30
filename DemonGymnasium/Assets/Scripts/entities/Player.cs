@@ -20,7 +20,7 @@ public class Player : Entity {
 	
 	}
 
-	public bool damage() {
+	public override void damage() {
 		HP--;
 		if (HP <= 0) {
 			//TODO Player dies
