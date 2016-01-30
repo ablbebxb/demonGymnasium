@@ -13,13 +13,13 @@ public class MapGenerator : MonoBehaviour {
 	public int numPlayers;
 	Tile[,] mapTiles;
 
-	private Monster[] monsters;
-	private Player[] players;
+	private Minion[] monsters;
+	private King[] players;
 
 	void Start() {
 		mapTiles = new Tile[width, height];
-		monsters = new Monster[numMonsters];
-		players = new Player[numPlayers];
+		monsters = new Minion[numMonsters];
+		players = new King[numPlayers];
 		generateMap();
 	}
 
@@ -41,14 +41,14 @@ public class MapGenerator : MonoBehaviour {
 
 				//place monsters in first column and players in last
 				if (monsterCount < numMonsters && i == 0 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Monster>();
+					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Minion>();
                     tile.setInitialEntity(entity);
-					monsters[monsterCount] = (Monster)entity;
+					monsters[monsterCount] = (Minion)entity;
 					monsterCount++;
 				} else if (playerCount < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Player>();
+					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<King>();
 					tile.setInitialEntity(entity);
-					players[playerCount] = (Player)entity;
+					players[playerCount] = (King)entity;
 					playerCount++;
 				}
 
@@ -60,11 +60,11 @@ public class MapGenerator : MonoBehaviour {
 		return mapTiles [x, y];
 	}
 
-	public Monster[] getMonsters() {
+	public Minion[] getMonsters() {
 		return monsters;
 	}
 
-	public Player[] getPlayers() {
+	public King[] getPlayers() {
 		return players;
 	}
 

@@ -31,7 +31,6 @@ public class Tile : MonoBehaviour {
         entity.transform.position = transform.position;
 		this.entityPresent = entity;
 		entity.setCurrentTile (this);
-		entity.setSpawnTile (this);
 	}
 
     public void removeEntity()
@@ -66,10 +65,10 @@ public class Tile : MonoBehaviour {
 	void OnMouseDown() {
 		if (entityPresent == null) {
 			GameManager.manager.selectTile (this);
-		} else if (entityPresent.GetType () == typeof(Player)) {
-			GameManager.manager.selectPlayer ((Player)entityPresent);
-		} else if (entityPresent.GetType () == typeof(Monster)) {
-			GameManager.manager.selectMonster ((Monster)entityPresent);
+		} else if (entityPresent.GetType () == typeof(King)) {
+			GameManager.manager.selectPlayer ((King)entityPresent);
+		} else if (entityPresent.GetType () == typeof(Minion)) {
+			GameManager.manager.selectMonster ((Minion)entityPresent);
 		}
 	}
 
