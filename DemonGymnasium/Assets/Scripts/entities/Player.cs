@@ -19,4 +19,12 @@ public class Player : Entity {
 	void Update () {
 	
 	}
+
+	public bool damage() {
+		HP--;
+		if (HP <= 0) {
+			//TODO Player dies
+		}
+	}
+
 }
