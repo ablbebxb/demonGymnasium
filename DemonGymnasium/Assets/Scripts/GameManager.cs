@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
 
 	public void selectPlayer(Player player) {
 		if (isHumanTurn) {
-			if (selectedObject == player) {
+			if (!player.getHasActed() && selectedObject == player) {
 				player.act();
 				recordAction ();
 			} else {
