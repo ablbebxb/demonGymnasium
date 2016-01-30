@@ -38,5 +38,9 @@ public class Tile : MonoBehaviour {
     {
         return y;
     }
+
+	void OnMouseClick() {
+		GameManager.manager.selectTile (this);
+	}
     
 }

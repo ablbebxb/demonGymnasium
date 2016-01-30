@@ -13,6 +13,11 @@ public class Monster : Entity {
 		base.Update ();
 	}
 
+	//handle selection in subclass to allow for later casting
+	void OnMouseDown() {
+		GameManager.manager.selectMonster (this);
+	}
+
 	public override void damage () {
 		GameObject.Destroy (this.gameObject);
 	}

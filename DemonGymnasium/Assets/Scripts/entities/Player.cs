@@ -21,8 +21,9 @@ public class Player : Entity {
 		base.Update ();
 	}
 
+	//handle selection in subclass to allow for later casting
 	void OnMouseDown() {
-		Debug.Log ("You clicked on player!");
+		GameManager.manager.selectPlayer (this);
 	}
 
 	public override void damage() {

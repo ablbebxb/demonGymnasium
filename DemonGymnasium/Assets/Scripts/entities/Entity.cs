@@ -21,19 +21,17 @@ public abstract class Entity : MonoBehaviour {
 	private int actionPoints;
 	private bool isMoving;//true while the entity is moving from one space to another
 	private Vector3 target;//the target space the entity is moving to
-	private GameManager manager;
 
 	// Use this for initialization
 	public void Start () {
 		actionPoints = startingActionPoints;
 		isMoving = false;
 		target = Vector3.zero;
-		manager = GameObject.FindGameObjectWithTag ("GameController").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
 	public void Update () {
-		this.transform.LookAt(manager.getCamera());
+		this.transform.LookAt(GameManager.manager.getCamera());
 
 		if (isMoving) {
 			this.transform.position += (target - this.transform.position).normalized * 0.1f;
@@ -43,10 +41,6 @@ public abstract class Entity : MonoBehaviour {
 				isMoving = false;
 			}
 		}
-	}
-
-	void OnMouseDown() {
-		Debug.Log ("You clicked on me!");
 	}
 
 	public abstract void damage ();
