@@ -5,7 +5,6 @@ public class Tile : MonoBehaviour {
 	Entity entityPresent;
     int x;
     int y;
-    bool isObstructed;
 	Renderer rend;
 
 	void Start() {
@@ -22,8 +21,21 @@ public class Tile : MonoBehaviour {
 	}
 
 	public void setObstruction(Entity entity) {
+        removeEntity();
+        entity.transform.parent = this.transform.parent;
+        entity.transform.position = transform.position;
 		this.entityPresent = entity;
 	}
+
+    public void removeEntity()
+    {
+        if (entityPresent == null)
+        {
+            return;
+        }
+        this.entityPresent.transform.parent = null;
+        this.entityPresent = null;
+    }
 
 
 
