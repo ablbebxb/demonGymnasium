@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
+    int x;
+    int y;
     bool isObstructed;
 
     public bool getIsObstructed()
@@ -9,5 +11,20 @@ public class Tile : MonoBehaviour {
         return isObstructed;
     }
 
+    public void setLocation(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
 
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+    
 }
