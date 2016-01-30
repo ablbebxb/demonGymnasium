@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
 				float dist;
 				if (isHumanTurn) {
                     //mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
-                    print("Why am I not moving");
+                    //print("Why am I not moving");
 					dist = Quaternion.Angle(Quaternion.Euler(playerCameraRotation), mainCameraTransform.rotation);
 				} else {
                     dist = Quaternion.Angle(Quaternion.Euler(monsterCameraRotation), mainCameraTransform.rotation);

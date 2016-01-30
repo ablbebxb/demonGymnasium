@@ -14,7 +14,7 @@ public class Player : Entity {
 	new void Start () {
 		base.Start ();
 		HP = startingHP;
-		GetComponentInChildren<Renderer> ().material.color = Color.blue;
+		//GetComponentInChildren<Renderer> ().material.color = Color.blue;
 	}
 	
 	// Update is called once per frame
