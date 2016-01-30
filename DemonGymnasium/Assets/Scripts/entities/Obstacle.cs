@@ -13,7 +13,7 @@ public class Obstacle : Entity {
 		base.Update();
     }
 
-	public override void damage ()
+	public override void takeDamage ()
 	{
 		GameObject.Destroy (this.gameObject);
 	}

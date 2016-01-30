@@ -12,21 +12,17 @@ public abstract class Entity : MonoBehaviour {
 	 * Tile size is 1
 	 */
 
-
-	/*
-	 * Default settings
-	 */
-	public int startingActionPoints;
-
-	private int actionPoints;
 	private bool isMoving;//true while the entity is moving from one space to another
 	private Vector3 target;//the target space the entity is moving to
+	private Tile currentTile;//the current tile this entity is on
+	private bool hasPerformedAction;//true when this monster has attacked this turn
+	
 
 	// Use this for initialization
 	public void Start () {
-		actionPoints = startingActionPoints;
 		isMoving = false;
 		target = Vector3.zero;
+		hasPerformedAction = false;
 	}
 	
 	// Update is called once per frame
@@ -43,26 +39,39 @@ public abstract class Entity : MonoBehaviour {
 		}
 	}
 
-	public abstract void damage ();
+	public abstract void takeDamage ();
 
-	public bool hasActionsLeft() {
-		return actionPoints > 0;
+	/**
+	 * resets entity state at end of turn
+	 */
+	public void reset() {
+		hasPerformedAction = false;
 	}
 
-	public void resetActions() {
-		actionPoints = startingActionPoints;
+	/**
+	 * Stub for primary actions of entities, should be called via base.act of overriding method in subclass
+	 */
+	public void act () {
+		hasPerformedAction = true;
+	}
+
+	public bool getHasActed() {
+		return hasPerformedAction;
+	}
+
+	public void setCurrentTile(Tile tile) {
+		currentTile = tile;
+	}
+
+	public Tile getCurrentTile() {
+		return currentTile;
 	}
 
 	private bool move(Vector3 dir) {
 		if (isMoving) {
-			return true;
-		}
-
-		if (!hasActionsLeft ()) {
 			return false;
 		}
 
-		actionPoints--;
 		isMoving = true;
 		target = this.transform.position + dir;
 		return true;

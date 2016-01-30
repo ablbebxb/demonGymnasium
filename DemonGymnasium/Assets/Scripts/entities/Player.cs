@@ -22,7 +22,13 @@ public class Player : Entity {
 		base.Update ();
 	}
 
-	public override void damage() {
+	public new void act() {
+		base.act ();
+		Debug.Log ("Clean!!!!!");
+	}
+
+	public override void takeDamage() {
+		Debug.Log ("OW!");
 		HP--;
 		if (HP <= 0) {
 			//TODO death animation

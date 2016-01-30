@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Monster : Entity {
 
+
 	// Use this for initialization
 	new void Start () {
 		base.Start ();
@@ -14,7 +15,15 @@ public class Monster : Entity {
 		base.Update ();
 	}
 
-	public override void damage () {
+
+
+	public new void act() {
+		base.act ();
+		//TODO attack animation
+		Debug.Log ("Attack!");
+	}
+
+	public override void takeDamage () {
 		GameObject.Destroy (this.gameObject);
 	}
 }

@@ -13,13 +13,18 @@ public class MapGenerator : MonoBehaviour {
 	public int numPlayers;
 	Tile[,] mapTiles;
 
+	private Monster[] monsters;
+	private Player[] players;
+
 	void Start() {
 		mapTiles = new Tile[width, height];
-		generateMap ();
+		monsters = new Monster[numMonsters];
+		players = new Player[numPlayers];
+		generateMap();
 	}
 
 	void generateMap() {
-		int monsters = 0, players = 0;
+		int monsterCount = 0, playerCount = 0;
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				GameObject obj = (GameObject)Instantiate(tileObject, Vector3.zero, new Quaternion());
@@ -35,14 +40,16 @@ public class MapGenerator : MonoBehaviour {
                 }
 
 				//place monsters in first column and players in last
-				if (monsters < numMonsters && i == 0 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
+				if (monsterCount < numMonsters && i == 0 && !tile.getIsObstructed()) {
+					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Monster>();
                     tile.setInitialEntity(entity);
-					monsters++;
-				} else if (players < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
+					monsters[monsterCount] = (Monster)entity;
+					monsterCount++;
+				} else if (playerCount < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
+					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Player>();
 					tile.setInitialEntity(entity);
-					players++;
+					players[playerCount] = (Player)entity;
+					playerCount++;
 				}
 
 			}
@@ -52,5 +59,14 @@ public class MapGenerator : MonoBehaviour {
 	public Tile getTileAtPosition(int x, int y) {
 		return mapTiles [x, y];
 	}
+
+	public Monster[] getMonsters() {
+		return monsters;
+	}
+
+	public Player[] getPlayers() {
+		return players;
+	}
+
 
 }
