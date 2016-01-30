@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour {
 	 */
 	private void moveCameraToPlayer() {
 		mainCameraTransform.position = playerCameraPosition;
-		mainCameraTransform.rotation.eulerAngles = playerCameraRotation;
+		mainCameraTransform.eulerAngles = playerCameraRotation;
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour {
 	 */
 	private void moveCameraToMonster() {
 		mainCameraTransform.position = playerCameraPosition;
-		mainCameraTransform.rotation.eulerAngles = playerCameraRotation;
+		mainCameraTransform.eulerAngles = playerCameraRotation;
 	}
 
 	
