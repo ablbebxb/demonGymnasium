@@ -27,5 +27,4 @@ public class Player : Entity {
 			GameObject.Destroy(this.gameObject);
 		}
 	}
-
 }

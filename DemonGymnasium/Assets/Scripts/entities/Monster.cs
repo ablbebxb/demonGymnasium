@@ -14,6 +14,6 @@ public class Monster : Entity {
 	}
 
 	public override void damage () {
-
+		GameObject.Destroy (this.gameObject);
 	}
 }

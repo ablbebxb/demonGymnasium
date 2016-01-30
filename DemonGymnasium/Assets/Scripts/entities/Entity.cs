@@ -2,6 +2,14 @@
 using System.Collections;
 
 public abstract class Entity : MonoBehaviour {
+	/**
+	 * Directions!!
+	 * North is Z+
+	 * South is Z-
+	 * East is x+
+	 * West is x-
+	 */
+
 
 	/*
 	 * Default settings
