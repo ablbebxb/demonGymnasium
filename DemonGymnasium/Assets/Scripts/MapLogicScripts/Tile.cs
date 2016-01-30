@@ -6,6 +6,11 @@ public class Tile : MonoBehaviour {
     int x;
     int y;
     bool isObstructed;
+	Renderer rend;
+
+	void Start() {
+		rend = GetComponentInChildren<Renderer> ();
+	}
 
     public bool getIsObstructed()
     {
@@ -39,8 +44,16 @@ public class Tile : MonoBehaviour {
         return y;
     }
 
-	void OnMouseClick() {
+	void OnMouseDown() {
 		GameManager.manager.selectTile (this);
+	}
+
+	void OnMouseOver() {
+		rend.material.color = Color.red;
+	}
+
+	void OnMouseExit() {
+		rend.material.color = Color.white;
 	}
     
 }

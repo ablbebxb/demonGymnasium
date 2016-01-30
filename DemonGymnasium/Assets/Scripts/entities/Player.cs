@@ -9,11 +9,13 @@ public class Player : Entity {
 	public int startingHP;
 
 	private int HP;
+	Renderer rend;
 
 	// Use this for initialization
 	new void Start () {
 		base.Start ();
 		HP = startingHP;
+		rend = GetComponentInChildren<Renderer> ();
 	}
 	
 	// Update is called once per frame
@@ -32,5 +34,13 @@ public class Player : Entity {
 			//TODO death animation
 			GameObject.Destroy(this.gameObject);
 		}
+	}
+
+	void OnMouseOver() {
+		rend.material.color = Color.red;
+	}
+	
+	void OnMouseExit() {
+		rend.material.color = Color.white;
 	}
 }
