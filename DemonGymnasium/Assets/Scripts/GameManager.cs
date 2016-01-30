@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 
 	public float cameraMoveSpeed;
 	public float cameraTesselationRate;
+    public float cameraRotationSpeed;
 	public float cameraTesselationTermination;
 	public int monsterActionsPerTurn;
 	public int playerActionsPerTurn;
@@ -39,17 +40,16 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		if (cameraInTransition) {
 			mainCameraTransform.position += (targetPosition - mainCameraTransform.position) * cameraTesselationRate;
-			mainCameraTransform.LookAt(new Vector3(generator.height/2, -5.05f, generator.width/2));
-
-			if((targetPosition - mainCameraTransform.position).magnitude < cameraTesselationTermination) {
+            //mainCameraTransform.LookAt(new Vector3(generator.height/2, -5.05f, generator.width/2));
+            mainCameraTransform.rotation = Quaternion.Slerp(mainCameraTransform.rotation, Quaternion.Euler(targetRotation), Time.deltaTime * cameraRotationSpeed);
+            if ((targetPosition - mainCameraTransform.position).magnitude < cameraTesselationTermination) {
 				float dist;
 				if (isHumanTurn) {
-					//mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
-					mainCameraTransform.rotation = Quaternion.Slerp(mainCameraTransform.rotation, Quaternion.Euler(playerCameraRotation), Time.deltaTime * 1.0f);
+                    //mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
+                    print("Why am I not moving");
 					dist = Quaternion.Angle(Quaternion.Euler(playerCameraRotation), mainCameraTransform.rotation);
 				} else {
-					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
-					dist = (monsterCameraRotation - mainCameraTransform.eulerAngles).magnitude;
+                    dist = Quaternion.Angle(Quaternion.Euler(monsterCameraRotation), mainCameraTransform.rotation);
 				}
 				if (dist < 2) {
 					cameraInTransition = false;
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour {
 
             Vector3 fwd = new Vector3(mainCameraTransform.forward.x, 0, mainCameraTransform.forward.z);
             Vector3 right = new Vector3(mainCameraTransform.right.x, 0, mainCameraTransform.right.z);
-            Vector3 goalPosition = (fwd * vInput + right * hInput) * 10;
+            Vector3 goalPosition = mainCameraTransform.position + (fwd * vInput + right * hInput) * 10;
             mainCameraTransform.position = Vector3.MoveTowards(mainCameraTransform.position, goalPosition, Time.deltaTime * cameraMoveSpeed);
 
 		}
