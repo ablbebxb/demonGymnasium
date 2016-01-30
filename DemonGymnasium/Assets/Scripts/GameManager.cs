@@ -44,10 +44,11 @@ public class GameManager : MonoBehaviour {
 			if((targetPosition - mainCameraTransform.position).magnitude < cameraTesselationTermination) {
 				float dist;
 				if (isHumanTurn) {
-					mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.5f;
-					dist = (playerCameraRotation - mainCameraTransform.eulerAngles).magnitude;
+					//mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
+					mainCameraTransform.rotation = Quaternion.Slerp(mainCameraTransform.rotation, Quaternion.Euler(playerCameraRotation), Time.deltaTime * 1.0f);
+					dist = Quaternion.Angle(Quaternion.Euler(playerCameraRotation), mainCameraTransform.rotation);
 				} else {
-					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * 0.5f;
+					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * 0.8f;
 					dist = (monsterCameraRotation - mainCameraTransform.eulerAngles).magnitude;
 				}
 				if (dist < 2) {

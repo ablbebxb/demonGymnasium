@@ -31,6 +31,7 @@ public class Tile : MonoBehaviour {
         entity.transform.position = transform.position;
 		this.entityPresent = entity;
 		entity.setCurrentTile (this);
+		entity.setSpawnTile (this);
 	}
 
     public void removeEntity()

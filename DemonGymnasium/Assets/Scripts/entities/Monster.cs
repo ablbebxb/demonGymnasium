@@ -15,8 +15,6 @@ public class Monster : Entity {
 		base.Update ();
 	}
 
-
-
 	public new void act() {
 		base.act ();
 		//TODO attack animation
