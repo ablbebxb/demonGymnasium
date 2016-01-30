@@ -35,8 +35,8 @@ public class MapGenerator : MonoBehaviour {
 
                 if (Random.Range(0f, 1f)  < obstructionPercantage)
                 {
-					Entity entity = ((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
-                    tile.setInitialEntity(entity);
+					/*Entity entity = ((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
+                    tile.setInitialEntity(entity);*/
                 }
 
 				//place monsters in first column and players in last

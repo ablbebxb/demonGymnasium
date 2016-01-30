@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-	public void selectPlayer(Player player) {
+	public void selectPlayer(Entity player) {
 		if (isHumanTurn) {
 			if (!player.getHasActed() && selectedObject == player) {
 				player.act();
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour {
 				selectedObject = player;
 			}
 		} else if (selectedObject != null) { //if the monster clicks on a player, make sure he has a monster selected before trying to attack
-			Monster monster = (Monster)selectedObject;
+			Minion monster = (Minion)selectedObject;
 			int sourceX = selectedObject.getCurrentTile().getX();
 			int sourceY = selectedObject.getCurrentTile().getY();
 			
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void selectMonster(Monster monster) {
+	public void selectMonster(Minion monster) {
 		if (!isHumanTurn) {
 			selectedObject = monster;
 		} else if (selectedObject != null) { //if the player clicks on a monster, make sure he has a player selected before trying to attack
@@ -194,11 +194,11 @@ public class GameManager : MonoBehaviour {
 		actionCounter = 0;
 		selectedObject = null;
 
-		foreach (Monster monster in generator.getMonsters()) {
+		foreach (Minion monster in generator.getMonsters()) {
 			monster.reset();
 		}
 
-		foreach (Player player in generator.getPlayers()) {
+		foreach (King player in generator.getPlayers()) {
 			player.reset();
 		}
 
