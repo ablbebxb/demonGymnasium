@@ -21,6 +21,10 @@ public class Player : Entity {
 		base.Update ();
 	}
 
+	void OnMouseDown() {
+		Debug.Log ("You clicked on player!");
+	}
+
 	public override void damage() {
 		HP--;
 		if (HP <= 0) {
