@@ -44,13 +44,13 @@ public class GameManager : MonoBehaviour {
 			if((targetPosition - mainCameraTransform.position).magnitude < cameraTesselationTermination) {
 				float dist;
 				if (isHumanTurn) {
-					mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * cameraTesselationRate;
+					mainCameraTransform.eulerAngles += (playerCameraRotation - mainCameraTransform.eulerAngles) * 0.5f;
 					dist = (playerCameraRotation - mainCameraTransform.eulerAngles).magnitude;
 				} else {
-					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * cameraTesselationRate;
+					mainCameraTransform.eulerAngles += (monsterCameraRotation - mainCameraTransform.eulerAngles) * 0.5f;
 					dist = (monsterCameraRotation - mainCameraTransform.eulerAngles).magnitude;
 				}
-				if (dist < cameraTesselationTermination) {
+				if (dist < 2) {
 					cameraInTransition = false;
 				}
 			}
@@ -104,6 +104,18 @@ public class GameManager : MonoBehaviour {
 	public void selectMonster(Monster monster) {
 		if (!isHumanTurn) {
 			selectedObject = monster;
+		} else if (selectedObject != null) { //if the player clicks on a monster, make sure he has a player selected before trying to attack
+			Entity player = selectedObject;//Call stub, not cleaning method in player class
+			int sourceX = selectedObject.getCurrentTile().getX();
+			int sourceY = selectedObject.getCurrentTile().getY();
+			
+			Debug.Log ("Try to hit");
+			
+			if (!monster.getHasActed() && checkLineofSight(sourceX, sourceY, player.getCurrentTile().getX(), player.getCurrentTile().getY())) {
+				player.act();
+				monster.takeDamage();
+				recordAction();
+			}
 		}
 	}
 
