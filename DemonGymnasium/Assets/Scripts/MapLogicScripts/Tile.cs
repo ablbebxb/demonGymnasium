@@ -2,14 +2,25 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
+	Entity entityPresent;
     int x;
     int y;
     bool isObstructed;
 
     public bool getIsObstructed()
     {
-        return isObstructed;
+		return entityPresent != null;
     }
+
+	public Entity getCurrentEntity() {
+		return this.entityPresent;
+	}
+
+	public void setObstruction(Entity entity) {
+		this.entityPresent = entity;
+	}
+
+
 
     public void setLocation(int x, int y)
     {
