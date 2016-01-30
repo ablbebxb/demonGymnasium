@@ -17,8 +17,6 @@ public abstract class Entity : MonoBehaviour {
 	 * Default settings
 	 */
 	public int startingActionPoints;
-	public bool m;
-	public Vector3 direction;
 
 	private int actionPoints;
 	private bool isMoving;//true while the entity is moving from one space to another
@@ -41,17 +39,11 @@ public abstract class Entity : MonoBehaviour {
 				isMoving = false;
 			}
 		}
-
-		if (m) {
-			move(direction);
-			m = false;
-		}
 	}
 
 	public abstract void damage ();
 
 	private void move(Vector3 dir) {
-		Debug.Log("Move");
 		if (isMoving) {
 			return;
 		}
