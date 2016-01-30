@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
 	public static GameManager manager;
 
 	public float cameraMoveSpeed;
+	public float cameraTesselationRate;
 	public int monsterActionsPerTurn;
 	public int playerActionsPerTurn;
 
@@ -18,28 +19,41 @@ public class GameManager : MonoBehaviour {
 	private Transform mainCameraTransform;
 	private MapGenerator generator;
 	private int actionCounter;
+	private bool cameraInTransition;
+	private Vector3 targetPosition, targetRotation;
 
 	// Use this for initialization
 	void Start () {
 		GameManager.manager = this;
 		isHumanTurn = true;
 		mainCameraTransform = GameObject.FindGameObjectWithTag ("MainCamera").transform;
-		moveCameraToPlayer();
+		mainCameraTransform.position = playerCameraPosition;
+		mainCameraTransform.eulerAngles = playerCameraRotation;
 		generator = GetComponent<MapGenerator> ();
 		actionCounter = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		//camera controls
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z + cameraMoveSpeed);
-		} else if (Input.GetKey (KeyCode.DownArrow)) {
-			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z - cameraMoveSpeed);
-		} else if (Input.GetKey (KeyCode.RightArrow)) {
-			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x + cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
-		} else if (Input.GetKey (KeyCode.LeftArrow)) {
-			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x - cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
+		if (cameraInTransition) {
+			mainCameraTransform.position += (targetPosition - mainCameraTransform.position) * cameraTesselationRate;
+			mainCameraTransform.LookAt(new Vector3(generator.height/2, -5, generator.width/2));
+
+			if((targetPosition - mainCameraTransform.position).magnitude < 1) {
+				cameraInTransition = false;
+			}
+
+		} else {
+			//camera controls
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z + cameraMoveSpeed);
+			} else if (Input.GetKey (KeyCode.DownArrow)) {
+				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z - cameraMoveSpeed);
+			} else if (Input.GetKey (KeyCode.RightArrow)) {
+				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x + cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
+			} else if (Input.GetKey (KeyCode.LeftArrow)) {
+				mainCameraTransform.position = new Vector3(mainCameraTransform.position.x - cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
+			}
 		}
 	}
 
@@ -169,16 +183,18 @@ public class GameManager : MonoBehaviour {
 	 * Move the camera to the initial position and rotation that should be used for the player's turn
 	 */
 	private void moveCameraToPlayer() {
-		mainCameraTransform.position = playerCameraPosition;
-		mainCameraTransform.eulerAngles = playerCameraRotation;
+		targetPosition = playerCameraPosition;
+		targetRotation = playerCameraRotation;
+		cameraInTransition = true;
 	}
 
 	/**
 	 * Move the camera to the initial position and rotation that should be used for the monster's turn
 	 */
 	private void moveCameraToMonster() {
-		mainCameraTransform.position = playerCameraPosition;
-		mainCameraTransform.eulerAngles = playerCameraRotation;
+		targetPosition = monsterCameraPosition;
+		targetRotation = monsterCameraRotation;
+		cameraInTransition = true;
 	}
 
 	
