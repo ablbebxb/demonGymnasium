@@ -2,14 +2,12 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
+    bool isObstructed;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public bool getIsObstructed()
+    {
+        return isObstructed;
+    }
+
+
 }

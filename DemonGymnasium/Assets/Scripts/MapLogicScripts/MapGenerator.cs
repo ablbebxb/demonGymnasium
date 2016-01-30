@@ -2,14 +2,17 @@
 using System.Collections;
 
 public class MapGenerator : MonoBehaviour {
+    public int height;
+    public int width;
+    public GameObject tileObject;
 
 	// Use this for initialization
 	void Start () {
-	
+        generateMap();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
+    void generateMap()
+    {
+
+    }
 }
