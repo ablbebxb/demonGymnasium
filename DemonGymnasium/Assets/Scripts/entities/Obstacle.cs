@@ -7,6 +7,11 @@ public class Obstacle : Entity {
 		base.Start ();
 	}
 
+    new void Update()
+    {
+
+    }
+
 	public override void damage ()
 	{
 		GameObject.Destroy (this.gameObject);

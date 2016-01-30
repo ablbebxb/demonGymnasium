@@ -4,7 +4,9 @@ using System.Collections;
 public class MapGenerator : MonoBehaviour {
     public int height = 10;
     public int width = 10;
+    public float obstructionPercantage = .05f;
     public GameObject tileObject;
+    public Entity obstructionObject;
 	Tile[,] mapTiles;
 
 	void Start() {
@@ -20,6 +22,11 @@ public class MapGenerator : MonoBehaviour {
 				tile.setLocation (i, j);
                 tile.transform.parent = this.transform;
 				mapTiles [i, j] = tile;
+                if (Random.Range(0f, 1f)  < obstructionPercantage)
+                {
+                    Entity entity = ((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>(); ;
+                    tile.setObstruction(entity);
+                }
 
 
 			}
