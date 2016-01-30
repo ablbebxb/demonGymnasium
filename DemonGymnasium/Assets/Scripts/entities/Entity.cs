@@ -92,4 +92,9 @@ public abstract class Entity : MonoBehaviour {
 	public bool moveWest () {
 		return move(new Vector3 (-1, 0, 0));
 	}
+
+    public bool getIsMoving()
+    {
+        return isMoving;
+    }
 }
