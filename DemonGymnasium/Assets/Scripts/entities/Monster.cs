@@ -9,8 +9,8 @@ public class Monster : Entity {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	new void Update () {
+		base.Update ();
 	}
 
 	public override void damage () {
