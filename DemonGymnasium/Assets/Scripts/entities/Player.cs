@@ -24,7 +24,7 @@ public class Player : Entity {
 
 	public new void act() {
 		base.act ();
-        getCurrentTile().GetComponent<CleanTile>().cleanTile();
+        //getCurrentTile().GetComponent<CleanTile>().cleanTile();
 		Debug.Log ("Clean!!!!!");
 	}
 
