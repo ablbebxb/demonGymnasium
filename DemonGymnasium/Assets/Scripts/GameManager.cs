@@ -5,12 +5,12 @@ public class GameManager : MonoBehaviour {
 
 	public static GameManager manager;
 
-	public GameObject playerPrefab;//tmp, eventually players should proabably be added in the  generator
+	public float cameraMoveSpeed;
 
-	private bool isHumanTurn;//true- human, false- monster
+	private bool isHumanTurn;
 	private Entity selectedObject;//the currently selected player/monster(/obstacle)
 	private Transform mainCameraTransform;
-	private MapGenerator generator;//TODO replace with map manager eventually
+	private MapGenerator generator;
 
 	// Use this for initialization
 	void Start () {
@@ -22,20 +22,27 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		//camera controls
+		if (Input.GetKey (KeyCode.UpArrow)) {
+			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z + cameraMoveSpeed);
+		} else if (Input.GetKey (KeyCode.DownArrow)) {
+			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x, mainCameraTransform.position.y, mainCameraTransform.position.z - cameraMoveSpeed);
+		} else if (Input.GetKey (KeyCode.RightArrow)) {
+			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x + cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
+		} else if (Input.GetKey (KeyCode.LeftArrow)) {
+			mainCameraTransform.position = new Vector3(mainCameraTransform.position.x - cameraMoveSpeed, mainCameraTransform.position.y, mainCameraTransform.position.z);
+		}
 	}
 
 	private void changeTurn() {
 		isHumanTurn = !isHumanTurn;
+		selectedObject.resetActions();
 		selectedObject = null;
 	}
 
 	public void selectPlayer(Player player) {
-		generator.getTileAtPosition (0, 0).setObstruction (playerPrefab.GetComponent<Player>());
-
 		if (isHumanTurn) {
 			selectedObject = player;
-			Debug.Log ("Select player");
 		}
 	}
 
@@ -46,29 +53,26 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void selectTile(Tile tile) {
-		Debug.Log ("Select Tile");
-
-		if (tile.getCurrentEntity ().GetComponent<Entity>() != null) {
-			if (isHumanTurn && tile.getCurrentEntity().GetComponent<Player>() != null) {
-				selectPlayer(tile.getCurrentEntity().GetComponent<Player>());
-			} else if (!isHumanTurn && tile.getCurrentEntity().GetComponent<Monster>() != null) {
-				selectMonster(tile.getCurrentEntity().GetComponent<Monster>());
-			}
-		} else if (selectedObject != null) {
+		if (selectedObject != null) {
 			int x = tile.getX ();
 			int y = tile.getY ();
+			bool movesLeft = true;
 			if (x > 0 && getEntityAtPosition (tile.getX () - 1, tile.getY ()) == selectedObject) {
 				moveToPositionFromPosition (x - 1, y, x, y);
-				selectedObject.moveEast ();
-			} else if (x < generator.width && getEntityAtPosition (tile.getX () + 1, tile.getY ()) == selectedObject) {
+				movesLeft = selectedObject.moveEast ();
+			} else if (x < generator.width - 1 && getEntityAtPosition (tile.getX () + 1, tile.getY ()) == selectedObject) {
 				moveToPositionFromPosition (x + 1, y, x, y);
-				selectedObject.moveWest ();
+				movesLeft = selectedObject.moveWest ();
 			} else if (y > 0 && getEntityAtPosition (tile.getX (), tile.getY () - 1) == selectedObject) {
 				moveToPositionFromPosition (x, y - 1, x, y);
-				selectedObject.moveNorth ();
-			} else if (y < generator.height && getEntityAtPosition (tile.getX (), tile.getY () + 1) == selectedObject) {
+				movesLeft = selectedObject.moveNorth ();
+			} else if (y < generator.height - 1 && getEntityAtPosition (tile.getX (), tile.getY () + 1) == selectedObject) {
 				moveToPositionFromPosition (x, y + 1, x, y);
-				selectedObject.moveSouth ();
+				movesLeft = selectedObject.moveSouth ();
+			}
+
+			if (!movesLeft) {
+				changeTurn();
 			}
 		}
 	}
@@ -83,7 +87,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void moveToPositionFromPosition(int x1, int y1, int x2, int y2) {
-		generator.getTileAtPosition (x1, y1).setObstruction(null);
-		generator.getTileAtPosition (x2, y2).setObstruction(selectedObject);
+		generator.getTileAtPosition (x1, y1).setEntity(null);
+		generator.getTileAtPosition (x2, y2).setEntity(selectedObject);
 	}
 }

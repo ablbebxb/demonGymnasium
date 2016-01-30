@@ -6,16 +6,12 @@ public class Monster : Entity {
 	// Use this for initialization
 	new void Start () {
 		base.Start ();
+		GetComponentInChildren<Renderer> ().material.color = Color.yellow;
 	}
 	
 	// Update is called once per frame
 	new void Update () {
 		base.Update ();
-	}
-
-	//handle selection in subclass to allow for later casting
-	void OnMouseDown() {
-		GameManager.manager.selectMonster (this);
 	}
 
 	public override void damage () {

@@ -49,28 +49,38 @@ public abstract class Entity : MonoBehaviour {
 		return actionPoints > 0;
 	}
 
-	private void move(Vector3 dir) {
+	public void resetActions() {
+		actionPoints = startingActionPoints;
+	}
+
+	private bool move(Vector3 dir) {
 		if (isMoving) {
-			return;
+			return true;
 		}
+
+		if (!hasActionsLeft ()) {
+			return false;
+		}
+
 		actionPoints--;
 		isMoving = true;
 		target = this.transform.position + dir;
+		return true;
 	}
 
-	public void moveNorth () {
-		move(new Vector3 (0, 0, 1));
+	public bool moveNorth () {
+		return move(new Vector3 (0, 0, 1));
 	}
 
-	public void moveSouth () {
-		move(new Vector3 (0, 0, -1));
+	public bool moveSouth () {
+		return move(new Vector3 (0, 0, -1));
 	}
 
-	public void moveEast () {
-		move(new Vector3 (1, 0, 0));
+	public bool moveEast () {
+		return move(new Vector3 (1, 0, 0));
 	}
 
-	public void moveWest () {
-		move(new Vector3 (-1, 0, 0));
+	public bool moveWest () {
+		return move(new Vector3 (-1, 0, 0));
 	}
 }

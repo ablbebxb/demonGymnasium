@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour {
     int x;
     int y;
 	Renderer rend;
+	long lastClick;//track for double clicks
 
 	void Start() {
 		rend = GetComponentInChildren<Renderer> ();
@@ -20,7 +21,12 @@ public class Tile : MonoBehaviour {
 		return this.entityPresent;
 	}
 
-	public void setObstruction(Entity entity) {
+	public void setEntity(Entity entity) {
+        removeEntity();
+		this.entityPresent = entity;
+	}
+
+	public void setInitialEntity(Entity entity) {
         removeEntity();
         entity.transform.parent = this.transform.parent;
         entity.transform.position = transform.position;
@@ -57,7 +63,18 @@ public class Tile : MonoBehaviour {
     }
 
 	void OnMouseDown() {
-		GameManager.manager.selectTile (this);
+		Debug.Log ("Last: " + lastClick + " This: " + System.DateTime.Now.Ticks);
+		if (System.DateTime.Now.Ticks - lastClick < 10000000) {
+			if (entityPresent == null) {
+				GameManager.manager.selectTile (this);
+			} else if (entityPresent.GetType () == typeof(Player)) {
+				GameManager.manager.selectPlayer ((Player)entityPresent);
+			} else if (entityPresent.GetType () == typeof(Monster)) {
+				GameManager.manager.selectMonster ((Monster)entityPresent);
+			}
+		}
+
+		lastClick = System.DateTime.Now.Ticks;
 	}
 
 	void OnMouseOver() {
