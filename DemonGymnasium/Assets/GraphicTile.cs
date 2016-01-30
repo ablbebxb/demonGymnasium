@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class GraphicTile : MonoBehaviour {
-    public Texture[] texutureTypes;
     string[] triggerNames = { "Janitor", "Demon", "Neutral"};
     Animator anim;
 
@@ -11,7 +10,7 @@ public class GraphicTile : MonoBehaviour {
         anim = GetComponent<Animator>();
 	}
 
-    public void selectTileTupe(int tileType)
+    public void selectTileType(int tileType)
     {
         foreach(string n in triggerNames)
         {

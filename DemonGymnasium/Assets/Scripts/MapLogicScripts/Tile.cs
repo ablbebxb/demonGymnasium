@@ -2,6 +2,12 @@
 using System.Collections;
 
 public class Tile : MonoBehaviour {
+    public const int JANITOR = 0;
+    public const int DEMON = 1;
+    public const int NEUTRAL = 2;
+
+    GraphicTile graphicTile;
+    int currentTileType;
 	Entity entityPresent;
     int x;
     int y;
@@ -9,6 +15,7 @@ public class Tile : MonoBehaviour {
 
 	void Start() {
 		rend = GetComponentInChildren<Renderer> ();
+        graphicTile = GetComponent<GraphicTile>();
 	}
 
     public bool getIsObstructed()
@@ -32,6 +39,12 @@ public class Tile : MonoBehaviour {
 		this.entityPresent = entity;
 		entity.setCurrentTile (this);
 	}
+
+    public void setTileType(int tileType)
+    {
+        graphicTile.selectTileType(tileType);
+        this.currentTileType = tileType;
+    }
 
     public void removeEntity()
     {
