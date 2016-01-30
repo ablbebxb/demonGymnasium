@@ -39,6 +39,16 @@ public abstract class Entity : MonoBehaviour {
 		}
 	}
 
+    public bool getIsPlayer()
+    {
+        return isPlayer;
+    }
+
+    public void setIsPlayer(bool isPlayer)
+    {
+        this.isPlayer = isPlayer;
+    }
+
     public abstract void takeDamage();
 
 	/**

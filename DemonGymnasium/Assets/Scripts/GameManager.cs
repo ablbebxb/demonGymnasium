@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
 	public int monsterActionsPerTurn;
 	public int playerActionsPerTurn;
 
-	public int monsterRange;//TODO move to monster class? Might make sense here though
+	public int monsterRange;
+    public GameObject playerModal;
 
 	public Vector3 playerCameraPosition, playerCameraRotation, monsterCameraPosition, monsterCameraRotation;//initial camera positioning per side
 	public float playerSpriteRotation, monsterSpriteRotation;//the static y-component of the sprite rotations
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour {
 	private int actionCounter;
 	private bool cameraInTransition;
 	private Vector3 targetPosition, targetRotation;
+    private int state;//0- player select, 1- move, 2- shoot
 
 	// Use this for initialization
 	void Start () {
@@ -34,7 +36,8 @@ public class GameManager : MonoBehaviour {
 		mainCameraTransform.eulerAngles = playerCameraRotation;
 		generator = GetComponent<MapGenerator> ();
 		actionCounter = 0;
-	}
+        state = 0;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -68,6 +71,11 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+    public int getState()
+    {
+        return state;
+    }
+
 	public Vector3 getSpriteRotation() {
 		if (isHumanTurn) {
 			return new Vector3(360 - mainCameraTransform.eulerAngles.x, playerSpriteRotation, 0);
@@ -78,48 +86,38 @@ public class GameManager : MonoBehaviour {
 
 
 	public void selectPlayer(Entity player) {
-		if (isHumanTurn) {
-			if (!player.getHasActed() && selectedObject == player) {
-				player.act();
-				recordAction ();
-			} else {
-				selectedObject = player;
-			}
-		} else if (selectedObject != null) { //if the monster clicks on a player, make sure he has a monster selected before trying to attack
-			Minion monster = (Minion)selectedObject;
-			int sourceX = selectedObject.getCurrentTile().getX();
-			int sourceY = selectedObject.getCurrentTile().getY();
-			
-			Debug.Log ("Try to hit");
-			
-			if (!monster.getHasActed() && checkLineofSight(sourceX, sourceY, player.getCurrentTile().getX(), player.getCurrentTile().getY())) {
-				monster.act();
-				player.takeDamage();
-				recordAction();
-			}
-		}
-	}
+        if (state == 0)
+        {
+            if ((isHumanTurn && player.getIsPlayer()) || (!isHumanTurn && !player.getIsPlayer()))
+            {
+                selectedObject = player;
+                GameObject.Instantiate(playerModal, player.transform.position + new Vector3(1, 1, 1), player.transform.rotation);
+            }
+            /*else if (selectedObject != null)
+            { //if the monster clicks on a player, make sure he has a monster selected before trying to attack
+                Minion monster = (Minion)selectedObject;
+                int sourceX = selectedObject.getCurrentTile().getX();
+                int sourceY = selectedObject.getCurrentTile().getY();
 
-	public void selectMonster(Minion monster) {
-		if (!isHumanTurn) {
-			selectedObject = monster;
-		} else if (selectedObject != null) { //if the player clicks on a monster, make sure he has a player selected before trying to attack
-			Entity player = selectedObject;//Call stub, not cleaning method in player class
-			int sourceX = selectedObject.getCurrentTile().getX();
-			int sourceY = selectedObject.getCurrentTile().getY();
-			
-			Debug.Log ("Try to hit");
-			
-			if (!monster.getHasActed() && checkLineofSight(sourceX, sourceY, player.getCurrentTile().getX(), player.getCurrentTile().getY())) {
-				player.act();
-				monster.takeDamage();
-				recordAction();
-			}
-		}
+                Debug.Log("Try to hit");
+
+                if (!monster.getHasActed() && checkLineofSight(sourceX, sourceY, player.getCurrentTile().getX(), player.getCurrentTile().getY()))
+                {
+                    monster.act();
+                    player.takeDamage();
+                    recordAction();
+                }
+            }*/
+        }
+        
 	}
 
 	public void selectTile(Tile tile) {
-		if (selectedObject != null) {
+        if (state == 1)
+        {
+
+        }
+        if (selectedObject != null) {
 			int x = tile.getX ();
 			int y = tile.getY ();
 			bool acted = false;

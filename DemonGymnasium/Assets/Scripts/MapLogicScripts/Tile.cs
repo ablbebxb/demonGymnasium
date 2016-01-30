@@ -63,12 +63,10 @@ public class Tile : MonoBehaviour {
     }
 
 	void OnMouseDown() {
-		if (entityPresent == null) {
+		if (entityPresent == null || GameManager.manager.getState() != 0) {
 			GameManager.manager.selectTile (this);
-		} else if (entityPresent.GetType () == typeof(King)) {
-			GameManager.manager.selectPlayer ((King)entityPresent);
-		} else if (entityPresent.GetType () == typeof(Minion)) {
-			GameManager.manager.selectMonster ((Minion)entityPresent);
+		} else if (entityPresent) {
+			GameManager.manager.selectPlayer (entityPresent);
 		}
 	}
 
