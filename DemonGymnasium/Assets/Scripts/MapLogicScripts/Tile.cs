@@ -75,6 +75,7 @@ public class Tile : MonoBehaviour {
 
 	void OnMouseOver() {
 		rend.material.color = Color.red;
+
 	}
 
 	void OnMouseExit() {
