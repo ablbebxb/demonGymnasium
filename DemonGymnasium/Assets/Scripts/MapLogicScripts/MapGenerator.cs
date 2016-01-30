@@ -18,6 +18,7 @@ public class MapGenerator : MonoBehaviour {
 				GameObject obj = (GameObject)Instantiate(tileObject, Vector3.zero, new Quaternion());
 				Tile tile = obj.GetComponent<Tile> ();
 				tile.setLocation (i, j);
+                tile.transform.parent = this.transform;
 				mapTiles [i, j] = tile;
 
 
