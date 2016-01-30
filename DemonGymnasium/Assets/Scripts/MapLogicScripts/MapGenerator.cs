@@ -13,13 +13,13 @@ public class MapGenerator : MonoBehaviour {
 	public int numPlayers;
 	Tile[,] mapTiles;
 
-	private Minion[] monsters;
-	private King[] players;
+	private Entity[] monsters;
+	private Entity[] players;
 
 	void Start() {
 		mapTiles = new Tile[width, height];
-		monsters = new Minion[numMonsters];
-		players = new King[numPlayers];
+		monsters = new Entity[numMonsters];
+		players = new Entity[numPlayers];
 		generateMap();
 	}
 
@@ -29,6 +29,7 @@ public class MapGenerator : MonoBehaviour {
 			for (int j = 0; j < height; j++) {
 				GameObject obj = (GameObject)Instantiate(tileObject, Vector3.zero, new Quaternion());
 				Tile tile = obj.GetComponent<Tile> ();
+
 				tile.setLocation (i, j);
                 tile.transform.parent = this.transform;
 				mapTiles [i, j] = tile;
@@ -41,14 +42,14 @@ public class MapGenerator : MonoBehaviour {
 
 				//place monsters in first column and players in last
 				if (monsterCount < numMonsters && i == 0 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Minion>();
+					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
                     tile.setInitialEntity(entity);
-					monsters[monsterCount] = (Minion)entity;
+					monsters[monsterCount] = entity;
 					monsterCount++;
 				} else if (playerCount < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<King>();
+					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
 					tile.setInitialEntity(entity);
-					players[playerCount] = (King)entity;
+					players[playerCount] = entity;
 					playerCount++;
 				}
 
@@ -60,11 +61,11 @@ public class MapGenerator : MonoBehaviour {
 		return mapTiles [x, y];
 	}
 
-	public Minion[] getMonsters() {
+	public Entity[] getMonsters() {
 		return monsters;
 	}
 
-	public King[] getPlayers() {
+	public Entity[] getPlayers() {
 		return players;
 	}
 
