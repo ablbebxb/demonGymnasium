@@ -102,25 +102,25 @@ public class GameManager : MonoBehaviour {
             int y = selectedObject.getCurrentTile().getY();
             int type = (isHumanTurn ? 0 : 1);
 
-            if (x > 0 && )
+            if (x > 0 && !isObstacle(getEntityAtPosition(x - 1, y)))
             {
                 damageIfEnemy(getEntityAtPosition(x - 1, y));
                 generator.getTileAtPosition(x - 1, y).setTileType(type);
             }
 
-            if (x < generator.width - 1)
+            if (x < generator.width - 1 && !isObstacle(getEntityAtPosition(x + 1, y)))
             {
                 damageIfEnemy(getEntityAtPosition(x + 1, y));
                 generator.getTileAtPosition(x + 1, y).setTileType(type);
             }
 
-            if (y > 0)
+            if (y > 0 && !isObstacle(getEntityAtPosition(x, y - 1)))
             {
                 damageIfEnemy(getEntityAtPosition(x, y - 1));
                 generator.getTileAtPosition(x, y - 1).setTileType(type);
             }
 
-            if (y < generator.height - 1)
+            if (y < generator.height - 1 && !isObstacle(getEntityAtPosition(x, y + 1)))
             {
                 damageIfEnemy(getEntityAtPosition(x, y + 1));
                 generator.getTileAtPosition(x, y + 1).setTileType(type);
@@ -348,6 +348,15 @@ public class GameManager : MonoBehaviour {
         }
     }
 	
+    private bool isObstacle(Entity obj)
+    {
+        if (obj != null && obj.GetType() == typeof(Obstacle))
+        {
+            return true;
+        }
+        return false;
+    }
+
 	//TODO put inside map generator/ map manager
 	private Entity getEntityAtPosition(int x, int y) {
 		return generator.getTileAtPosition (x, y).getCurrentEntity ();
