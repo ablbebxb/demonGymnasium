@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour {
         if (actionsPerTurn - actionCounter > 2)
         {
             state = 2;
-            playerModal.SetActive(false);
+            //playerModal.SetActive(false);
             //TODO highlight possible targets
         }
     }
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour {
     public void setupMove()
     {
         state = 1;
-        playerModal.SetActive(false);
+        //playerModal.SetActive(false);
         //TODO highlight possible moves
     }
 
@@ -145,7 +145,13 @@ public class GameManager : MonoBehaviour {
             if (isHumanTurn == player.getIsPlayer())
             {
                 selectedObject = player;
-                playerModal.SetActive(true);
+
+				if(!playerModal.GetComponent<PlayerModal> ().enabled){
+					playerModal.GetComponent<PlayerModal> ().SetUIPos (player.transform);
+					playerModal.GetComponent<PlayerModal> ().Enable ();
+				}
+
+
             }
         }
         
@@ -479,7 +485,7 @@ public class GameManager : MonoBehaviour {
 		actionCounter = 0;
         state = 0;
 		selectedObject = null;
-        playerModal.SetActive(false);
+        //playerModal.SetActive(false);
 
 		foreach (Entity monster in generator.getMonsters()) {
 			monster.reset();
