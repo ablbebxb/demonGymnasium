@@ -49,7 +49,11 @@ public abstract class Entity : MonoBehaviour {
         this.isPlayer = isPlayer;
     }
 
-    public abstract void takeDamage();
+    public void takeDamage()
+    {
+        //TODO death animation
+        GameObject.Destroy(this.gameObject);
+    }
 
 	/**
 	 * resets entity state at end of turn
@@ -77,30 +81,30 @@ public abstract class Entity : MonoBehaviour {
 		return currentTile;
 	}
 
-	protected bool move(Vector3 dir) {
+	protected bool move(Vector3 dir, int units) {
 		if (isMoving) {
 			return false;
 		}
 
 		isMoving = true;
-		target = this.transform.position + dir;
+		target = this.transform.position + dir * units;
 		return true;
 	}
 
-	public bool moveNorth () {
-		return move(new Vector3 (0, 0, 1));
+	public bool moveNorth (int units) {
+		return move(new Vector3 (0, 0, 1), units);
 	}
 
-	public bool moveSouth () {
-		return move(new Vector3 (0, 0, -1));
+	public bool moveSouth (int units) {
+		return move(new Vector3 (0, 0, -1), units);
 	}
 
-	public bool moveEast () {
-		return move(new Vector3 (1, 0, 0));
+	public bool moveEast (int units) {
+		return move(new Vector3 (1, 0, 0), units);
 	}
 
-	public bool moveWest () {
-		return move(new Vector3 (-1, 0, 0));
+	public bool moveWest (int units) {
+		return move(new Vector3 (-1, 0, 0), units);
 	}
 
     public bool getIsMoving()

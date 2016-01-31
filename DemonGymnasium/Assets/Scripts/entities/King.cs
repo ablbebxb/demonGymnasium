@@ -2,15 +2,9 @@
 using System.Collections;
 
 public class King : Entity {
-
-    public int startingHP;
-
-    private int HP;
-
 	// Use this for initialization
 	new void Start () {
 		base.Start ();
-        HP = startingHP;
 	}
 	
 	// Update is called once per frame
@@ -18,32 +12,23 @@ public class King : Entity {
 		base.Update ();
 	}
 
-	public override void takeDamage() {
-		Debug.Log ("OW!");
-		HP--;
-		if (HP <= 0) {
-			//TODO death animation
-			GameObject.Destroy(this.gameObject);
-		}
-	}
-
-    public bool moveNorthEast()
+    public bool moveNorthEast(int units)
     {
-        return base.move(new Vector3(1, 0, 1));
+        return base.move(new Vector3(1, 0, 1), units);
     }
 
-    public bool moveSouthEast()
+    public bool moveSouthEast(int units)
     {
-        return base.move(new Vector3(1, 0, -1));
+        return base.move(new Vector3(1, 0, -1), units);
     }
 
-    public bool moveNorthWest()
+    public bool moveNorthWest(int units)
     {
-        return base.move(new Vector3(-1, 0, 1));
+        return base.move(new Vector3(-1, 0, 1), units);
     }
 
-    public bool moveSouthWest()
+    public bool moveSouthWest(int units)
     {
-        return base.move(new Vector3(-1, 0, -1));
+        return base.move(new Vector3(-1, 0, -1), units);
     }
 }

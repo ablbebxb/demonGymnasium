@@ -165,58 +165,62 @@ public class GameManager : MonoBehaviour {
             {
                 int x = tile.getX();
                 int y = tile.getY();
-                bool acted = false;
 
-                int type = (isHumanTurn ? 0 : 1);
-                if (x > 0 && getEntityAtPosition(x - 1, y) == selectedObject)
+                Tile sourceTile = selectedObject.getCurrentTile();
+                bool acted = moveTo(selectedObject, sourceTile.getX(), sourceTile.getY(), x, y);
+                /*if (canMoveTo(sourceTile.getX(), sourceTile.getY(), x, y))
                 {
-                    moveFromPositionToPosition(x - 1, y, x, y);
-                    acted = selectedObject.moveEast();
-                }
-                else if (x < generator.width - 1 && getEntityAtPosition(x + 1, y) == selectedObject)
-                {
-                    moveFromPositionToPosition(x + 1, y, x, y);
-                    acted = selectedObject.moveWest();
-                }
-                else if (y > 0 && getEntityAtPosition(x, y - 1) == selectedObject)
-                {
-                    moveFromPositionToPosition(x, y - 1, x, y);
-                    acted = selectedObject.moveNorth();
-                }
-                else if (y < generator.height - 1 && getEntityAtPosition(x, y + 1) == selectedObject)
-                {
-                    moveFromPositionToPosition(x, y + 1, x, y);
-                    acted = selectedObject.moveSouth();
-                }
+                    int type = (isHumanTurn ? 0 : 1);
+                    if (x > 0 && getEntityAtPosition(x - 1, y) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x - 1, y, x, y);
+                        acted = selectedObject.moveEast();
+                    }
+                    else if (x < generator.width - 1 && getEntityAtPosition(x + 1, y) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x + 1, y, x, y);
+                        acted = selectedObject.moveWest();
+                    }
+                    else if (y > 0 && getEntityAtPosition(x, y - 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x, y - 1, x, y);
+                        acted = selectedObject.moveNorth();
+                    }
+                    else if (y < generator.height - 1 && getEntityAtPosition(x, y + 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x, y + 1, x, y);
+                        acted = selectedObject.moveSouth();
+                    }
 
-                if (selectedObject.GetType() == typeof(King))
-                {
-                    if (y < generator.height - 1 && x < generator.width - 1 && getEntityAtPosition(x + 1, y + 1) == selectedObject)
+                    if (selectedObject.GetType() == typeof(King))
                     {
-                        moveFromPositionToPosition(x + 1, y + 1, x, y);
-                        acted = ((King)selectedObject).moveSouthWest();
-                    } else if (y < generator.height - 1 && x > 0 && getEntityAtPosition(x - 1, y + 1) == selectedObject)
+                        if (y < generator.height - 1 && x < generator.width - 1 && getEntityAtPosition(x + 1, y + 1) == selectedObject)
+                        {
+                            moveFromPositionToPosition(x + 1, y + 1, x, y);
+                            acted = ((King)selectedObject).moveSouthWest();
+                        }
+                        else if (y < generator.height - 1 && x > 0 && getEntityAtPosition(x - 1, y + 1) == selectedObject)
+                        {
+                            moveFromPositionToPosition(x - 1, y + 1, x, y);
+                            acted = ((King)selectedObject).moveSouthEast();
+                        }
+                        else if (y > 0 && x < generator.width - 1 && getEntityAtPosition(x + 1, y - 1) == selectedObject)
+                        {
+                            moveFromPositionToPosition(x + 1, y - 1, x, y);
+                            acted = ((King)selectedObject).moveNorthWest();
+                        }
+                        else if (y > 0 && x > 0 && getEntityAtPosition(x - 1, y - 1) == selectedObject)
+                        {
+                            moveFromPositionToPosition(x - 1, y - 1, x, y);
+                            acted = ((King)selectedObject).moveNorthEast();
+                        }
+                    }*/
+
+                    if (acted)
                     {
-                        moveFromPositionToPosition(x - 1, y + 1, x, y);
-                        acted = ((King)selectedObject).moveSouthEast();
+                        recordAction();
                     }
-                    else if (y > 0 && x < generator.width - 1 && getEntityAtPosition(x + 1, y - 1) == selectedObject)
-                    {
-                        moveFromPositionToPosition(x + 1, y - 1, x, y);
-                        acted = ((King)selectedObject).moveNorthWest();
-                    }
-                    else if (y > 0 && x > 0 && getEntityAtPosition(x - 1, y - 1) == selectedObject)
-                    {
-                        moveFromPositionToPosition(x - 1, y - 1, x, y);
-                        acted = ((King)selectedObject).moveNorthEast();
-                    }
-                }
-                
-                if (acted)
-                {
-                    generator.getTileAtPosition(x, y).setTileType(type);
-                    recordAction();
-                }
+                //}
             }
         } else if (state == 2) {
             if (selectedObject != null)
@@ -312,6 +316,154 @@ public class GameManager : MonoBehaviour {
 		}
 		return lineOfSight;
 	}
+
+    private bool moveTo(Entity entity, int sourceX, int sourceY, int x, int y)
+    {
+        bool obstructed = false;
+        int type = (isHumanTurn ? 0 : 1);
+        if (sourceX == x && sourceY < y)
+        {
+            for (int i = 1; i < y - sourceY; i++)
+            {
+                Tile tile = generator.getTileAtPosition(x, sourceY + i);
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                entity.moveNorth(y - sourceY);
+            }
+        }
+        else if (sourceX == x && sourceY > y)
+        {
+            for (int i = 1; i < sourceY - y; i++)
+            {
+                Tile tile = generator.getTileAtPosition(x, y + i);
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                entity.moveSouth(sourceY - y);
+            }
+        }
+        else if (sourceY == y && sourceX < x)
+        {
+            for (int i = 1; i < x - sourceX; i++)
+            {
+                Tile tile = generator.getTileAtPosition(sourceX + i, y);
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                entity.moveEast(x - sourceX);
+            }
+        }
+        else if (sourceY == y && sourceX > x)
+        {
+            for (int i = 1; i < sourceX - x; i++)
+            {
+                Tile tile = generator.getTileAtPosition(x + i, y);
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                entity.moveWest(sourceX - x);
+            }
+        } else if (entity.GetType() == typeof(King) && Mathf.Abs(sourceX - x) == Mathf.Abs(sourceY - y))
+        {
+            King king = (King)entity;
+            if (sourceY > y && sourceX > x)
+            {
+                for (int i = 1; i < sourceX - x; i++)
+                {
+                    Tile tile = generator.getTileAtPosition(x + i, y + i);
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveSouthWest(sourceX - x);
+                }
+            }
+            else if (sourceY < y && sourceX > x)
+            {
+                for (int i = 1; i < sourceX - x; i++)
+                {
+                    Tile tile = generator.getTileAtPosition(x + i, y - i);
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveNorthWest(sourceX - x);
+                }
+            }
+            else if (sourceY > y && sourceX < x)
+            {
+                for (int i = 1; i < x - sourceX; i++)
+                {
+                    Tile tile = generator.getTileAtPosition(x - i, y + i);
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveSouthEast(x - sourceX);
+                }
+            }
+            else if (sourceY < y && sourceX < x)
+            {
+                for (int i = 1; i < x - sourceX; i++)
+                {
+                    Tile tile = generator.getTileAtPosition(x - i, y - i);
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveNorthEast(x - sourceX);
+                }
+            }
+        }
+        else
+        {
+            obstructed = true;
+        }
+
+        if (!obstructed)
+        {
+            moveFromPositionToPosition(sourceX, sourceY, x, y);
+        }
+
+        return !obstructed;
+    }
 	
 	private void recordAction() {
 		actionCounter++;

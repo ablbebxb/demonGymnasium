@@ -25,8 +25,4 @@ public class Minion : Entity {
 		//TODO attack animation
 		Debug.Log ("Attack!");
 	}
-
-	public override void takeDamage () {
-		GameObject.Destroy (this.gameObject);
-	}
 }
