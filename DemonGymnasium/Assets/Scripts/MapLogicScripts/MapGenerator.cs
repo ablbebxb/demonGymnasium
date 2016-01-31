@@ -47,23 +47,35 @@ public class MapGenerator : MonoBehaviour {
                 }
 
 				//place monsters in first column and players in last
-				if (monsterCount < numMonsters && i == 0 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
-                    tile.setInitialEntity(entity);
-					monsters[monsterCount] = entity;
-					monsterCount++;
-				} else if (playerCount < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
-					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
-					tile.setInitialEntity(entity);
-					players[playerCount] = entity;
-					playerCount++;
-				}
+//				if (monsterCount < numMonsters && i == 0 && !tile.getIsObstructed()) {
+//					Entity entity = ((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
+//                    tile.setInitialEntity(entity);
+//					monsters[monsterCount] = entity;
+//					monsterCount++;
+//				} else if (playerCount < numPlayers && i == width - 1 && !tile.getIsObstructed()) {
+//					Entity entity = ((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>();
+//					tile.setInitialEntity(entity);
+//					players[playerCount] = entity;
+//					playerCount++;
+//				}
 
 			}
 		}
 
-        mapTiles[1, 0].setInitialEntity(((GameObject)Instantiate(kingMonster.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
-        mapTiles[1, 1].setInitialEntity(((GameObject)Instantiate(kingPlayer.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[0, 0].setInitialEntity(((GameObject)Instantiate(kingMonster.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[1, 0].setInitialEntity(((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[0, 1].setInitialEntity(((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[2, 0].setInitialEntity(((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[0, 2].setInitialEntity(((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[1, 1].setInitialEntity(((GameObject)Instantiate(monsterObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+
+		mapTiles[8, 8].setInitialEntity(((GameObject)Instantiate(kingPlayer.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[7, 8].setInitialEntity(((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[8, 7].setInitialEntity(((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[8, 6].setInitialEntity(((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[6, 8].setInitialEntity(((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+		mapTiles[7, 7].setInitialEntity(((GameObject)Instantiate(playerObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+
 
         mapTiles[3, 3].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
         mapTiles[3, 5].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
