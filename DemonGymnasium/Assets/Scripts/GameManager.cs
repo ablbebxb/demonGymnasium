@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour {
 
     public void endGame(int id)
     {
-<<<<<<< HEAD
         if (id == JANITOR)
         {
             uiManager.GameEnds(DEMON);
@@ -53,13 +52,7 @@ public class GameManager : MonoBehaviour {
         uiManager.GameEnds(JANITOR);
     }
 
-    public void endGameBoardFull()
-    {
-
-=======
-        uiManager.GameEnds(1);
->>>>>>> f78a3dcea0213915d1d3740431f40cf8664929f3
-    }
+   
 
     void changeTurns()
     {
