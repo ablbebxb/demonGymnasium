@@ -30,10 +30,15 @@ public class PlayerSelectManager : MonoBehaviour {
         if (Physics.Raycast(ray, out hit))
         {
             Tile tile = hit.collider.GetComponent<Tile>();
-            if (tile != null )
+            if (tile != null && gameManager.currentTurn == tile.getCurrentEntity().entityType)
             {
-                
+                currentCharacterSelected = tile.getCurrentEntity();
             }
         }
+    }
+
+    public void resetSelection()
+    {
+        currentCharacterSelected = null;
     }
 }
