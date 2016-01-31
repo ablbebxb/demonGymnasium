@@ -5,14 +5,17 @@ using UnityEngine.UI;
 
 public class EndPanel_UI : MonoBehaviour {
 
+	private AudioSource AS;
 	private Text winText;
 	private Image BG;
 	private Image image;
 
+	public AudioClip demonWinMusic;
 	public string demonWinText;
 	public Sprite demonWinBG;
 	public Sprite demonWinImage;
 
+	public AudioClip janitorWinMusic;
 	public string janitorWinText;
 	public Sprite janitorWinBG;
 	public Sprite janitorWinImage;
@@ -20,6 +23,7 @@ public class EndPanel_UI : MonoBehaviour {
 
 
 	public void Awake(){
+		AS = GetComponent<AudioSource> ();
 		BG = GetComponent<Image> ();
 		winText = ((RectTransform)transform).Find ("WinText").gameObject.GetComponent<Text> ();
 		image = ((RectTransform)transform).Find ("Image").gameObject.GetComponent<Image> ();
@@ -31,12 +35,18 @@ public class EndPanel_UI : MonoBehaviour {
 
 		//Janitor wins
 		if (winner == 0) {
+			AS.Stop ();
+			AS.clip = janitorWinMusic;
+			AS.Play ();
 			winText.text = janitorWinText;
 			BG.sprite = janitorWinBG;
 			image.sprite = janitorWinImage;
 		}
 		//Demon wins
 		else if (winner == 1) {
+			AS.Stop ();
+			AS.clip = demonWinMusic;
+			AS.Play ();
 			winText.text = demonWinText;
 			BG.sprite = demonWinBG;
 			image.sprite = demonWinImage;
