@@ -24,17 +24,26 @@ public class ActionManager : MonoBehaviour {
 
     void Update()
     {
+        if (Input.GetButtonDown("Fire1") && currentActionSelected != -1)
+        {
+            playerSelectManager.mouseClicked();
+            bool success = false;
+            if (currentActionSelected == SHOOT)
+            {
+                success = handleAttackLogic();
+            }
 
-        if (currentActionSelected == SHOOT && Input.GetButtonDown("Fire1"))
-        {
-            playerSelectManager.mouseClicked();
-            handleAttackLogic();
+            if (currentActionSelected == MOVING)
+            {
+                success = handleMovementLogic();
+            }
+
+            if (success)
+            {
+                GameManager.gameManager.performAction();
+            }
         }
-        if (currentActionSelected == MOVING && Input.GetButtonDown("Fire1"))
-        {
-            playerSelectManager.mouseClicked();
-            handleMovementLogic();
-        }
+        
     }
 
     public void selectMovement(Entity entity)
@@ -57,7 +66,7 @@ public class ActionManager : MonoBehaviour {
         handleExpandLogic();
     }
 
-    public void handleMovementLogic()
+    public bool handleMovementLogic()
     {
         currentActionSelected = -1;
         bool obstructed = false;
@@ -86,7 +95,7 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceX == x && sourceY > y)
         {
-            for (int i = 1; i <= sourceY - y; i++)
+            for (int i = 0; i < sourceY - y; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x, y + i];
                 if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
@@ -118,7 +127,7 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceY == y && sourceX > x)
         {
-            for (int i = 1; i <= sourceX - x; i++)
+            for (int i = 0; i < sourceX - x; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x + i, y];
                 if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
@@ -136,7 +145,7 @@ public class ActionManager : MonoBehaviour {
             King king = (King)currentEntity;
             if (sourceY > y && sourceX > x)
             {
-                for (int i = 1; i <= sourceX - x; i++)
+                for (int i = 0; i < sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y + i];
                     if (tile.getIsObstructed())
@@ -152,7 +161,7 @@ public class ActionManager : MonoBehaviour {
             }
             else if (sourceY < y && sourceX > x)
             {
-                for (int i = 1; i <= sourceX - x; i++)
+                for (int i = 0; i < sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y - i];
                     if (tile.getIsObstructed())
@@ -211,18 +220,17 @@ public class ActionManager : MonoBehaviour {
             goalTile.setEntity(currentEntity);
         }
 
-        //return !obstructed;
+        return !obstructed;
     }
     
 
-    public void handleAttackLogic()
+    public bool handleAttackLogic()
     {
         currentActionSelected = -1;
         if (playerSelectManager.currentTileSelected == null)
         {
-            return;
+            return false;
         }
-        print("Hello");
 
         Tile tile = playerSelectManager.currentTileSelected;
         Tile playerTile = currentEntity.getCurrentTile();
@@ -232,7 +240,6 @@ public class ActionManager : MonoBehaviour {
         int y = tile.getY();
         if (checkLineofSight(playerTile.getX(), playerTile.getY(), tile.getX(), tile.getY()))
         {
-            print("CheckLineOfSight");
             if (tile.getCurrentEntity() != null && tile.getCurrentEntity().GetType() != typeof(Obstacle))
             {
                 damageIfEnemy(tile.getCurrentEntity());
@@ -247,6 +254,7 @@ public class ActionManager : MonoBehaviour {
                 {
                     MapGenerator.mapTiles[x, sourceY + i].setTileType(type);
                 }
+                return true;
             }
             else if (sourceX == x && sourceY > y)
             {
@@ -254,6 +262,8 @@ public class ActionManager : MonoBehaviour {
                 {
                     MapGenerator.mapTiles[x, y + i].setTileType(type);
                 }
+                return true;
+
             }
             else if (sourceY == y && sourceX < x)
             {
@@ -261,6 +271,8 @@ public class ActionManager : MonoBehaviour {
                 {
                     MapGenerator.mapTiles[sourceX + i, y].setTileType(type);
                 }
+                return true;
+
             }
             else if (sourceY == y && sourceX > x)
             {
@@ -268,9 +280,12 @@ public class ActionManager : MonoBehaviour {
                 {
                     MapGenerator.mapTiles[x + i, y].setTileType(type);
                 }
+                return true;
+
             }
 
         }
+        return false;
     }
     private void damageIfEnemy(Entity other)
     {

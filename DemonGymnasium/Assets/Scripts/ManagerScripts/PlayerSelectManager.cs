@@ -52,8 +52,6 @@ public class PlayerSelectManager : MonoBehaviour {
             }
           
         }
-        
-        gameManager.performAction();
     }
 
     void setHighlightColor(Entity entity)

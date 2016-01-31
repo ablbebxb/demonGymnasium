@@ -18,9 +18,16 @@ public class Tile : MonoBehaviour {
 	void Start() {
 		rend = GetComponentInChildren<Renderer> ();
         graphicTile = GetComponent<GraphicTile>();
-        currentTileType = NEUTRAL;
 		PickRandomMaterialForNeutral ();
-	}
+        if (entityPresent)
+        {
+            currentTileType = entityPresent.entityType;
+        }
+        else
+        {
+            currentTileType = 2;
+        }
+    }
 
 	void PickRandomMaterialForNeutral(){
 		int randomNum = (int)Random.Range(0, 100);
