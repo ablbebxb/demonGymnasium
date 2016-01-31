@@ -251,7 +251,6 @@ public class ActionManager : MonoBehaviour {
 
             if (sourceX == x && sourceY < y)
             {
-                
                 for (int i = 1; i <= y - sourceY; i++)
                 {
                     MapGenerator.mapTiles[x, sourceY + i].setTileType(type);
@@ -289,6 +288,7 @@ public class ActionManager : MonoBehaviour {
         }
         return false;
     }
+
     private void damageIfEnemy(Entity other)
     {
         if (other != null && other.getIsPlayer() != GameManager.gameManager.getPlayerTurn())
@@ -296,10 +296,6 @@ public class ActionManager : MonoBehaviour {
             other.takeDamage();
         }
     }
-
-
-
-
 
     public void handleExpandLogic()
     {
@@ -362,7 +358,7 @@ public class ActionManager : MonoBehaviour {
         bool lineOfSight = true;
         if (sourceX == x && sourceY < y && y - sourceY <= 2)
         {
-            for (int i = 1; i < y - sourceY; i++)
+            for (int i = 1; i <= y - sourceY; i++)
             {
                 if (MapGenerator.mapTiles[x, sourceY + i].getIsObstructed())
                 {
@@ -372,7 +368,7 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceX == x && sourceY > y && sourceY - y <= 2)
         {
-            for (int i = 1; i < sourceY - y; i++)
+            for (int i = 0; i < sourceY - y; i++)
             {
                 if (MapGenerator.mapTiles[x, y + i].getIsObstructed())
                 {
@@ -382,7 +378,7 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceY == y && sourceX < x && x - sourceX <= 2)
         {
-            for (int i = 1; i < x - sourceX; i++)
+            for (int i = 1; i <= x - sourceX; i++)
             {
                 if (MapGenerator.mapTiles[sourceX + i, y].getIsObstructed())
                 {
@@ -392,7 +388,7 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceY == y && sourceX > x && sourceX - x <= 2)
         {
-            for (int i = 1; i < sourceX - x; i++)
+            for (int i = 0; i < sourceX - x; i++)
             {
                 if (MapGenerator.mapTiles[x + i, y].getIsObstructed())
                 {
