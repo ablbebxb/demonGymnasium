@@ -33,7 +33,7 @@ public class ActionManager : MonoBehaviour {
         currentActionSelected = MOVING;
     }
 
-    public void setAttack(Entity entity)
+    public void selectAttack(Entity entity)
     {
         currentEntity = entity;
         currentActionSelected = SHOOT;
