@@ -5,6 +5,8 @@ public class ActionManager : MonoBehaviour {
     public const int MOVING = 0;
     public const int SHOOT = 1;
     public const int EXPAND = 2;
+	public GameObject Demon_Expand_FX;
+	public GameObject Janitor_Expand_FX;
 
     int currentActionSelected;
     Entity currentEntity;
@@ -58,7 +60,10 @@ public class ActionManager : MonoBehaviour {
     }
 
     public void handleMovementLogic()
-    {
+	{
+		
+
+
         currentActionSelected = -1;
         bool obstructed = false;
         int type = (GameManager.gameManager.getPlayerTurn() ? 0 : 1);
@@ -286,6 +291,18 @@ public class ActionManager : MonoBehaviour {
 
     public void handleExpandLogic()
     {
+		//0 is janitor; 1 is demon
+		GameObject newFX;
+		if (currentEntity.entityType == 0) {
+			newFX = (GameObject)Instantiate (Janitor_Expand_FX);
+
+		} 
+		else {
+			newFX = (GameObject)Instantiate (Demon_Expand_FX);
+		}
+		newFX.GetComponent<AbilityFX> ().SetupAndPlay (currentEntity.transform);
+
+
         Tile[,] mapTiles = MapGenerator.mapTiles;
         int x = currentEntity.getCurrentTile().getX();
         int y = currentEntity.getCurrentTile().getY();
