@@ -76,6 +76,49 @@ public class GameManager : MonoBehaviour {
         return state;
     }
 
+    public void setupAttack()
+    {
+        state = 2;
+        //TODO highlight possible targets
+    }
+
+    public void setupMove()
+    {
+        state = 1;
+        //TODO highlight possible moves
+    }
+
+    public void expand()
+    {
+        if (selectedObject != null)
+        {
+            int x = selectedObject.getCurrentTile().getX();
+            int y = selectedObject.getCurrentTile().getY();
+            int type = (isHumanTurn ? 0 : 1);
+
+            if (x > 0)
+            {
+                damageIfEnemy(getEntityAtPosition(x - 1, y));
+                generator.getTileAtPosition(x - 1, y).setTileType(type);
+            }
+            else if (x < generator.width - 1)
+            {
+                damageIfEnemy(getEntityAtPosition(x + 1, y));
+                generator.getTileAtPosition(x + 1, y).setTileType(type);
+            }
+            else if (y > 0)
+            {
+                damageIfEnemy(getEntityAtPosition(x, y - 1));
+                generator.getTileAtPosition(x, y - 1).setTileType(type);
+            }
+            else if (y < generator.height - 1)
+            {
+                damageIfEnemy(getEntityAtPosition(x, y + 1));
+                generator.getTileAtPosition(x, y + 1).setTileType(type);
+            }
+        }
+    }
+
 	public Vector3 getSpriteRotation() {
 		if (isHumanTurn) {
 			return new Vector3(360 - mainCameraTransform.eulerAngles.x, playerSpriteRotation, 0);
@@ -88,26 +131,11 @@ public class GameManager : MonoBehaviour {
 	public void selectPlayer(Entity player) {
         if (state == 0)
         {
-            if ((isHumanTurn && player.getIsPlayer()) || (!isHumanTurn && !player.getIsPlayer()))
+            if (isHumanTurn == player.getIsPlayer())
             {
                 selectedObject = player;
-                GameObject.Instantiate(playerModal, player.transform.position + new Vector3(1, 1, 1), player.transform.rotation);
+                playerModal.SetActive(true);
             }
-            /*else if (selectedObject != null)
-            { //if the monster clicks on a player, make sure he has a monster selected before trying to attack
-                Minion monster = (Minion)selectedObject;
-                int sourceX = selectedObject.getCurrentTile().getX();
-                int sourceY = selectedObject.getCurrentTile().getY();
-
-                Debug.Log("Try to hit");
-
-                if (!monster.getHasActed() && checkLineofSight(sourceX, sourceY, player.getCurrentTile().getX(), player.getCurrentTile().getY()))
-                {
-                    monster.act();
-                    player.takeDamage();
-                    recordAction();
-                }
-            }*/
         }
         
 	}
@@ -115,31 +143,94 @@ public class GameManager : MonoBehaviour {
 	public void selectTile(Tile tile) {
         if (state == 1)
         {
+            if (selectedObject != null)
+            {
+                int x = tile.getX();
+                int y = tile.getY();
+                bool acted = false;
+                Entity entityOnTile = getEntityAtPosition(x, y);
+                if (x > 0 && getEntityAtPosition(x - 1, y) == selectedObject)
+                {
+                    moveFromPositionToPosition(x - 1, y, x, y);
+                    acted = selectedObject.moveEast();
+                }
+                else if (x < generator.width - 1 && getEntityAtPosition(x + 1, y) == selectedObject)
+                {
+                    moveFromPositionToPosition(x + 1, y, x, y);
+                    acted = selectedObject.moveWest();
+                }
+                else if (y > 0 && getEntityAtPosition(x, y - 1) == selectedObject)
+                {
+                    moveFromPositionToPosition(x, y - 1, x, y);
+                    acted = selectedObject.moveNorth();
+                }
+                else if (y < generator.height - 1 && getEntityAtPosition(x, y + 1) == selectedObject)
+                {
+                    moveFromPositionToPosition(x, y + 1, x, y);
+                    acted = selectedObject.moveSouth();
+                }
 
+                if (acted)
+                {
+                    recordAction();
+                }
+            }
+        } else if (state == 2) {
+            if (selectedObject != null)
+            {
+                Entity source = (Entity)selectedObject;
+                int sourceX = selectedObject.getCurrentTile().getX();
+                int sourceY = selectedObject.getCurrentTile().getY();
+
+                Debug.Log("Try to hit");
+
+                int x = tile.getX();
+                int y = tile.getY();
+
+                if (checkLineofSight(sourceX, sourceY, x, y))
+                {
+                    source.act();
+                    if (tile.getCurrentEntity() != null)
+                    {
+                        damageIfEnemy(tile.getCurrentEntity());
+                    }
+
+                    int type = (isHumanTurn ? 0 : 1);
+
+                    if (sourceX == x && sourceY < y)
+                    {
+                        for (int i = 1; i < y - sourceY; i++)
+                        {
+                            generator.getTileAtPosition(x, sourceY + i).setTileType(type);
+                        }
+                    }
+                    else if (sourceX == x && sourceY > y)
+                    {
+                        for (int i = 1; i < sourceY - y; i++)
+                        {
+                            generator.getTileAtPosition(x, y + i).setTileType(type);
+                        }
+                    }
+                    else if (sourceY == y && sourceX < x)
+                    {
+                        for (int i = 1; i < x - sourceX; i++)
+                        {
+                            generator.getTileAtPosition(sourceX + i, y).setTileType(type);
+                        }
+                    }
+                    else if (sourceY == y && sourceX > x)
+                    {
+                        for (int i = 1; i < sourceX - x; i++)
+                        {
+                            generator.getTileAtPosition(x + i, y).setTileType(type);
+                        }
+                    }
+
+                    recordAction();
+                }
+            }
         }
-        if (selectedObject != null) {
-			int x = tile.getX ();
-			int y = tile.getY ();
-			bool acted = false;
-			Entity entityOnTile = getEntityAtPosition(x, y);
-			if (x > 0 && getEntityAtPosition (x - 1, y) == selectedObject) {
-				moveFromPositionToPosition (x - 1, y, x, y);
-				acted = selectedObject.moveEast ();
-			} else if (x < generator.width - 1 && getEntityAtPosition (x + 1, y) == selectedObject) {
-				moveFromPositionToPosition (x + 1, y, x, y);
-				acted = selectedObject.moveWest ();
-			} else if (y > 0 && getEntityAtPosition (x, y - 1) == selectedObject) {
-				moveFromPositionToPosition (x, y - 1, x, y);
-				acted = selectedObject.moveNorth ();
-			} else if (y < generator.height - 1 && getEntityAtPosition (x, y + 1) == selectedObject) {
-				moveFromPositionToPosition (x, y + 1, x, y);
-				acted = selectedObject.moveSouth ();
-			}
-
-			if (acted) {
-				recordAction();
-			}
-		}
+        
 	}
 
 	public Transform getCamera() {
@@ -192,11 +283,11 @@ public class GameManager : MonoBehaviour {
 		actionCounter = 0;
 		selectedObject = null;
 
-		foreach (Minion monster in generator.getMonsters()) {
+		foreach (Entity monster in generator.getMonsters()) {
 			monster.reset();
 		}
 
-		foreach (King player in generator.getPlayers()) {
+		foreach (Entity player in generator.getPlayers()) {
 			player.reset();
 		}
 
@@ -225,6 +316,13 @@ public class GameManager : MonoBehaviour {
 		cameraInTransition = true;
 	}
 
+    private void damageIfEnemy(Entity other)
+    {
+        if (other != null && other.getIsPlayer() == isHumanTurn)
+        {
+            other.takeDamage();
+        }
+    }
 	
 	//TODO put inside map generator/ map manager
 	private Entity getEntityAtPosition(int x, int y) {

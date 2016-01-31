@@ -16,7 +16,7 @@ public abstract class Entity : MonoBehaviour {
 	private Vector3 target;//the target space the entity is moving to
 	private Tile currentTile;//the current tile this entity is on
 	private bool hasPerformedAction;//true when this monster has attacked this turn
-	private bool isPlayer;//true- player, false- monster
+	public bool isPlayer;//true- player, false- monster
 
 	// Use this for initialization
 	public void Start () {
