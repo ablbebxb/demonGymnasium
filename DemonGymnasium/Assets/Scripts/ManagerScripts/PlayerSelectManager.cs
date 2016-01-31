@@ -7,11 +7,13 @@ public class PlayerSelectManager : MonoBehaviour {
     
     Camera mainCamera;
     GameManager gameManager;
+    PlayerModal playerModal;
 
     void Start()
     {
         mainCamera = GameObject.FindObjectOfType<Camera>();
         gameManager = GetComponent<GameManager>();
+        playerModal = GameObject.FindObjectOfType<PlayerModal>();
     }
 
     void Update()
@@ -36,6 +38,8 @@ public class PlayerSelectManager : MonoBehaviour {
                 if (tileEntity != null && tileEntity.entityType == gameManager.currentTurn)
                 {
                     currentCharacterSelected = tile.getCurrentEntity();
+                    playerModal.SetUIPos(tileEntity.transform);
+                    playerModal.Enable();
                 }
             }
         }

@@ -14,7 +14,7 @@ public class King : Entity {
 
     public override void takeDamage()
     {
-        GameObject.FindObjectOfType<GameManager>().endGame();
+        GameObject.FindObjectOfType<GameManager>().endGame(entityType);
         base.takeDamage();
     }
 
