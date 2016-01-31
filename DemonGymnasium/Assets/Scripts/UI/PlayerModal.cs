@@ -43,7 +43,7 @@ public class PlayerModal : MonoBehaviour
 		outOfActionPanel = true;
 	}
 
-	public void OnGUI(){
+	public void Update(){
 		CheckSubAttackPanel();
 		CheckActionPanel ();
 	}
@@ -51,12 +51,14 @@ public class PlayerModal : MonoBehaviour
 	public void Enable(){
 		Reset ();
 		actionPanel.SetActive (true);
+		playerSelectManager.ignoreClick = true;
 	}
 
 	public void Disable(){
 		enabled = false;
 		actionPanel.SetActive (false);
 		DisableSubAttackPanel ();
+		playerSelectManager.ignoreClick = false;
 	}
 
 

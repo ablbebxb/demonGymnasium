@@ -47,7 +47,7 @@ public class PlayerSelectManager : MonoBehaviour {
         {
             resetSelection();
         }
-        gameManager.performAction();
+        //gameManager.performAction();
     }
 
     public void resetSelection()
