@@ -22,9 +22,9 @@ public class Tile : MonoBehaviour {
 
 	void Start() {
 		rend = GetComponentsInChildren<Renderer> ();
-        
 
         
+
 
         graphicTile = GetComponent<GraphicTile>();
 		PickRandomMaterialForNeutral ();
@@ -36,7 +36,10 @@ public class Tile : MonoBehaviour {
         {
             currentTileType = 2;
         }
-        
+        if (entityPresent == null)
+        {
+            setTileType(NEUTRAL);
+        }
     }
 
 	void PickRandomMaterialForNeutral(){
@@ -62,10 +65,7 @@ public class Tile : MonoBehaviour {
         {
             r.materials = new Material[] { floorMaterials[resultIndex] };
         }
-        rend[0].material.color = janitorColor;
-        rend[1].material.color = demonColor;
-        rend[0].gameObject.SetActive(false);
-        rend[1].gameObject.SetActive(false);
+        
 
 	}
 
@@ -148,22 +148,15 @@ public class Tile : MonoBehaviour {
 	void OnMouseOver() {
         foreach(Renderer r in rend)
         {
-            if (r.enabled)
-            {
-                r.material.color = Color.red;
-            }
+            r.material.color = Color.red;
         }
 
 	}
 
 	void OnMouseExit() {
-        foreach (Renderer r in rend)
-        {
-            if (r.enabled)
-            {
-                r.material.color = Color.white;
-            }
-        }
+        rend[0].material.color = janitorColor;
+        rend[1].material.color = demonColor;
+        rend[2].material.color = Color.white;
     }
     
 }

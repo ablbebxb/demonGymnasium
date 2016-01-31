@@ -3,12 +3,12 @@ using System.Collections;
 
 public class GraphicTile : MonoBehaviour {
     string[] triggerNames = { "Janitor", "Demon", "Neutral"};
-    Animator anim;
+    public Animator anim;
 
 
 	// Use this for initialization
 	void Start () {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
 	}
 
 
@@ -17,7 +17,7 @@ public class GraphicTile : MonoBehaviour {
     {
         foreach(string n in triggerNames)
         {
-            anim.ResetTrigger(n);
+           anim.ResetTrigger(n);
         }
         anim.SetTrigger(triggerNames[tileType]);
     }
