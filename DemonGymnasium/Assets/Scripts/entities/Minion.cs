@@ -7,7 +7,7 @@ public class Minion : Entity {
 	// Use this for initialization
 	new void Start () {
 		base.Start ();
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
 		//GetComponentInChildren<Renderer> ().material.color = Color.yellow;
 	}
 	
