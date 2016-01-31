@@ -9,6 +9,7 @@ public class GraphicTile : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         //anim = GetComponent<Animator>();
+        
 	}
 
 

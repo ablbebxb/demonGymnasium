@@ -22,10 +22,8 @@ public class Tile : MonoBehaviour {
 
 	void Start() {
 		rend = GetComponentsInChildren<Renderer> ();
-
         
-
-
+        
         graphicTile = GetComponent<GraphicTile>();
 		PickRandomMaterialForNeutral ();
         if (entityPresent)
@@ -40,6 +38,9 @@ public class Tile : MonoBehaviour {
         {
             setTileType(NEUTRAL);
         }
+        rend[0].material.color = janitorColor;
+        rend[1].material.color = demonColor;
+        rend[2].material.color = Color.white;
     }
 
 	void PickRandomMaterialForNeutral(){
