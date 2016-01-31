@@ -30,23 +30,23 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		switch(currentState){
+
+		case UISTATE.Ingame:
+			StartIngame ();
+
+			break;
+
+
+		case UISTATE.Endgame:
+			StartEndgame ();
+
+			break;
+		}
 	}
 
 	void OnGUI(){
-		switch(currentState){
-
-			case UISTATE.Ingame:
-				StartIngame ();
-
-				break;
-			
-
-			case UISTATE.Endgame:
-				StartEndgame ();
-
-				break;
-		}
+		
 	}
 
 	void StartIngame(){
