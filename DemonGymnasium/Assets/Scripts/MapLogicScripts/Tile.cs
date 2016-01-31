@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour {
     public const int NEUTRAL = 2;
 
     GraphicTile graphicTile;
-    int currentTileType;
+    int currentTileType = NEUTRAL;
 	Entity entityPresent;
     int x;
     int y;
@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour {
 	void Start() {
 		rend = GetComponentInChildren<Renderer> ();
         graphicTile = GetComponent<GraphicTile>();
+        currentTileType = NEUTRAL;
 	}
 
     public bool getIsObstructed()
@@ -44,6 +45,11 @@ public class Tile : MonoBehaviour {
     {
         graphicTile.selectTileType(tileType);
         this.currentTileType = tileType;
+    }
+
+    public int getCurrentTileType()
+    {
+        return currentTileType;
     }
 
     public void removeEntity()

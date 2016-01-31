@@ -207,6 +207,7 @@ public class GameManager : MonoBehaviour {
 		} else {
 			moveCameraToMonster();
 		}
+        MapGenerator.updateTileScore();
 	}
 
 	/**
