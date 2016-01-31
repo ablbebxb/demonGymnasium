@@ -12,6 +12,12 @@ public class King : Entity {
 		base.Update ();
 	}
 
+    public override void takeDamage()
+    {
+        GameObject.FindObjectOfType<GameManager>().endGame();
+        base.takeDamage();
+    }
+
     public bool moveNorthEast(int units)
     {
         return base.move(new Vector3(1, 0, 1), units);

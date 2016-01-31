@@ -9,14 +9,18 @@ public class GameManager : MonoBehaviour {
 
     public int currentTurn;
     public LinkedList<Entity> currentPlayers;
+    public bool gameInProgress = true;
     int turnsLeft;
     CameraManager cameraManager;
+    UIManager uiManager;
+
 
     void Start()
     {
         currentPlayers = new LinkedList<Entity>();
         currentTurn = JANITOR;
         cameraManager = GetComponent<CameraManager>();
+        uiManager = GameObject.FindObjectOfType<UIManager>();
         turnsLeft = turnsPerPlayer;
     }
 
@@ -38,6 +42,11 @@ public class GameManager : MonoBehaviour {
     {
     }
 
+    public void endGame()
+    {
+        uiManager.gameEnds();
+    }
+
     void changeTurns()
     {
         if (currentTurn == JANITOR)
@@ -49,5 +58,10 @@ public class GameManager : MonoBehaviour {
             currentTurn = JANITOR;
         }
         cameraManager.shiftCamera(currentTurn);
+    }
+
+    public string getWinnerString()
+    {
+        return null;
     }
 }

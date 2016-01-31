@@ -50,9 +50,10 @@ public abstract class Entity : MonoBehaviour {
         this.isPlayer = isPlayer;
     }
 
-    public void takeDamage()
+    public virtual void takeDamage()
     {
         //TODO death animation
+
         GameObject.Destroy(this.gameObject);
     }
 
