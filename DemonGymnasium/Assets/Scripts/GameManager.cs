@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
     public const int JANITOR = 0;
     public const int DEMON = 1;
+	public int turnsCompleted;
 
     public int turnsPerPlayer;
 
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
+		turnsCompleted = 0;
         gameManager = this;
         currentPlayers = new LinkedList<Entity>();
         currentTurn = JANITOR;
@@ -74,6 +76,7 @@ public class GameManager : MonoBehaviour {
 
     void changeTurns()
     {
+		turnsCompleted++;
         turnsLeft = turnsPerPlayer;
         if (currentTurn == JANITOR)
         {
@@ -85,4 +88,16 @@ public class GameManager : MonoBehaviour {
         }
         cameraManager.shiftCamera(currentTurn);
     }
+
+
+	void checkLocks(){
+		GameObject[] locks = GameObject.FindGameObjectsWithTag ("Lock");
+		for(int i = 0; i < locks.Length; i ++){
+			if (locks [i].GetComponent<LockUI>().turnsTilDestroyed <= 0) {
+				locks [i].GetComponent<LockUI>().DestroySelf ();
+			} else {
+				locks [i].GetComponent<LockUI>().turnsTilDestroyed--;
+			}
+		}
+	}
 }

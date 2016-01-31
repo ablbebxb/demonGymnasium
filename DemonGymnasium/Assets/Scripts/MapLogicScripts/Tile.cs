@@ -7,11 +7,13 @@ public class Tile : MonoBehaviour {
     public const int NEUTRAL = 2;
 
     GraphicTile graphicTile;
-    int currentTileType = NEUTRAL;
+    public int currentTileType = NEUTRAL;
 	Entity entityPresent;
     int x;
     int y;
 	Renderer rend;
+	public bool locked;
+
 
 	public Material[] floorMaterials = new Material[5];
 
@@ -44,7 +46,7 @@ public class Tile : MonoBehaviour {
 
 
 		rend.materials = new Material[]{floorMaterials[resultIndex]};
-		Debug.Log (resultIndex);
+		//Debug.Log (resultIndex);
 	}
 
     public bool getIsObstructed()
@@ -78,8 +80,11 @@ public class Tile : MonoBehaviour {
 
     public void setTileType(int tileType)
     {
-        graphicTile.selectTileType(tileType);
-        this.currentTileType = tileType;
+		if(!locked){
+			graphicTile.selectTileType(tileType);
+			this.currentTileType = tileType;
+		}
+        
     }
 
     public int getCurrentTileType()

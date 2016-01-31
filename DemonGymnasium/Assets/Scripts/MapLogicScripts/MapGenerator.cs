@@ -62,8 +62,8 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 
-        mapTiles[0, playerCount].setInitialEntity(((GameObject)Instantiate(kingMonster.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
-        mapTiles[width - 1, monsterCount].setInitialEntity(((GameObject)Instantiate(kingPlayer.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[1, 0].setInitialEntity(((GameObject)Instantiate(kingMonster.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[1, 1].setInitialEntity(((GameObject)Instantiate(kingPlayer.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
 
         mapTiles[3, 3].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
         mapTiles[3, 5].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
