@@ -27,7 +27,7 @@ public abstract class Entity : MonoBehaviour {
 	
 	// Update is called once per frame
 	public void Update () {
-		this.transform.eulerAngles = GameManager.manager.getSpriteRotation();
+		//this.transform.eulerAngles = GameManager.manager.getSpriteRotation();
 
 		if (isMoving) {
 			this.transform.position += (target - this.transform.position).normalized * 0.1f;

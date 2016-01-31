@@ -89,16 +89,7 @@ public class Tile : MonoBehaviour {
     }
 
 	void OnMouseDown() {
-        if (entityPresent != null && entityPresent.GetType() == typeof(Obstacle))
-        {
-            return;
-        }
-
-		if (entityPresent == null || GameManager.manager.getState() != 0) {
-			GameManager.manager.selectTile (this);
-		} else if (entityPresent) {
-			GameManager.manager.selectPlayer (entityPresent);
-		}
+        
 	}
 
 	void OnMouseOver() {

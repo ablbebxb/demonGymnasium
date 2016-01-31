@@ -67,7 +67,7 @@ public class PlayerModal : MonoBehaviour
 
 	void CheckSubAttackPanel(){
 		if(outOfSubAttackPanel && outOfAttackButton){
-			Debug.Log ("Disabling subattack panel");
+			//Debug.Log ("Disabling subattack panel");
 
 			DisableSubAttackPanel ();
 		}
@@ -136,19 +136,19 @@ public class PlayerModal : MonoBehaviour
 
     public void moveButtonClicked()
     {
-        GameManager.manager.setupMove();
+        //GameManager.manager.setupMove();
 		Disable ();
     }
 
     public void shootButtonClicked()
     {
-        GameManager.manager.setupAttack();
+        //GameManager.manager.setupAttack();
 		Disable ();
     }
 
     public void expandButtonClicked()
     {
-        GameManager.manager.expand();
+        //GameManager.manager.expand();
 		Disable ();
     }
 
