@@ -88,6 +88,7 @@ public class ActionManager : MonoBehaviour
         currentActionSelected = EXPAND;
 
         handleExpandLogic();
+        GameManager.gameManager.performAction();
     }
 
     public bool handleMovementLogic()
@@ -382,6 +383,12 @@ public class ActionManager : MonoBehaviour
                 GameObject lockUI = (GameObject)Instantiate(LockUI);
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
             }
+
+
+            if (currentEntity.entityType != mapTiles[x - 1, y].getCurrentEntity().entityType)
+            {
+                checkKillEnemy(mapTiles[x - 1, y]);
+            }
         }
         if (y - 1 >= 0)
         {
@@ -391,6 +398,11 @@ public class ActionManager : MonoBehaviour
                 mapTiles[x, y - 1].locked = true;
                 GameObject lockUI = (GameObject)Instantiate(LockUI);
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+            }
+
+            if (currentEntity.entityType != mapTiles[x, y - 1].getCurrentEntity().entityType)
+            {
+                checkKillEnemy(mapTiles[x, y - 1]);
             }
         }
         if (x + 1 < mapTiles.GetLength(0))
@@ -403,6 +415,11 @@ public class ActionManager : MonoBehaviour
                 GameObject lockUI = (GameObject)Instantiate(LockUI);
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
             }
+
+            if (currentEntity.entityType != mapTiles[x + 1, y].getCurrentEntity().entityType)
+            {
+                checkKillEnemy(mapTiles[x + 1, y]);
+            }
         }
         if (y + 1 < mapTiles.GetLength(1))
         {
@@ -413,6 +430,13 @@ public class ActionManager : MonoBehaviour
                 mapTiles[x, y + 1].locked = true;
                 GameObject lockUI = (GameObject)Instantiate(LockUI);
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+                checkKillEnemy(mapTiles[x, y + 1]);
+            }
+
+            if (currentEntity.entityType != mapTiles[x, y + 1].getCurrentEntity().entityType)
+            {
+                checkKillEnemy(mapTiles[x, y + 1]);
+
             }
         }
 
@@ -440,11 +464,12 @@ public class ActionManager : MonoBehaviour
     private bool checkLineofSight(int sourceX, int sourceY, int x, int y)
     {
         bool lineOfSight = true;
+        int enemyType = (GameManager.gameManager.getPlayerTurn() ? 1 : 0);
         if (sourceX == x && sourceY < y && y - sourceY <= 2)
         {
             for (int i = 1; i <= y - sourceY; i++)
             {
-                if (MapGenerator.mapTiles[x, sourceY + i].getIsObstructed())
+                if (MapGenerator.mapTiles[x, sourceY + i].getIsObstructed() && MapGenerator.mapTiles[x, sourceY + i].getCurrentEntity().entityType != enemyType)
                 {
                     lineOfSight = false;
                 }
@@ -454,7 +479,7 @@ public class ActionManager : MonoBehaviour
         {
             for (int i = 0; i < sourceY - y; i++)
             {
-                if (MapGenerator.mapTiles[x, y + i].getIsObstructed())
+                if (MapGenerator.mapTiles[x, y + i].getIsObstructed() && MapGenerator.mapTiles[x, y + i].getCurrentEntity().entityType != enemyType)
                 {
                     lineOfSight = false;
                 }
@@ -464,7 +489,7 @@ public class ActionManager : MonoBehaviour
         {
             for (int i = 1; i <= x - sourceX; i++)
             {
-                if (MapGenerator.mapTiles[sourceX + i, y].getIsObstructed())
+                if (MapGenerator.mapTiles[sourceX + i, y].getIsObstructed() && MapGenerator.mapTiles[sourceX + i, y].getCurrentEntity().entityType != enemyType)
                 {
                     lineOfSight = false;
                 }
@@ -474,7 +499,7 @@ public class ActionManager : MonoBehaviour
         {
             for (int i = 0; i < sourceX - x; i++)
             {
-                if (MapGenerator.mapTiles[x + i, y].getIsObstructed())
+                if (MapGenerator.mapTiles[x + i, y].getIsObstructed() && MapGenerator.mapTiles[x + i, y].getCurrentEntity().entityType != enemyType)
                 {
                     lineOfSight = false;
                 }

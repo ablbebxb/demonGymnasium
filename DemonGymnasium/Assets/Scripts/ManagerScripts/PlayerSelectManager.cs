@@ -29,28 +29,31 @@ public class PlayerSelectManager : MonoBehaviour {
 
     public void mouseClicked()
     {
-        resetSelection();
-        currentTileSelected = null;
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        if (!ignoreClick)
         {
-            Tile tile = hit.collider.GetComponent<Tile>();
-            currentTileSelected = tile;
-            if (tile != null)
+            resetSelection();
+            currentTileSelected = null;
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                Entity tileEntity = tile.getCurrentEntity();
-                if (tileEntity != null && tileEntity.entityType == gameManager.currentTurn)
+                Tile tile = hit.collider.GetComponent<Tile>();
+                currentTileSelected = tile;
+                if (tile != null)
                 {
-                    currentCharacterSelected = tile.getCurrentEntity();
-                    setHighlightColor(tileEntity);
-                    tileEntity.GetComponentInChildren<SpriteRenderer>().color = Color.green;
-                    playerModal.SetUIPos(tileEntity.transform);
-                    playerModal.Enable();
+                    Entity tileEntity = tile.getCurrentEntity();
+                    if (tileEntity != null && tileEntity.entityType == gameManager.currentTurn)
+                    {
+                        currentCharacterSelected = tile.getCurrentEntity();
+                        setHighlightColor(tileEntity);
+                        tileEntity.GetComponentInChildren<SpriteRenderer>().color = Color.green;
+                        playerModal.SetUIPos(tileEntity.transform);
+                        playerModal.Enable();
+                    }
+
                 }
-                
+
             }
-          
         }
     }
 
