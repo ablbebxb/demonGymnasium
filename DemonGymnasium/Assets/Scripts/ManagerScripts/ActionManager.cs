@@ -90,7 +90,15 @@ public class ActionManager : MonoBehaviour {
         {
             return;
         }
-        
+        if (entity.entityType == currentEntity.entityType)
+        {
+            return;
+        }
+        if (entity.entityType == Tile.NEUTRAL)
+        {
+            return;
+        }
+        entity.takeDamage();
     } 
 
 }
