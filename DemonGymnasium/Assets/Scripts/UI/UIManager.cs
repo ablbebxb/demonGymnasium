@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour {
 	}
 	public UISTATE currentState;
 
-
 	private GameObject actionPanel;
 	private GameObject endPanel;
 
@@ -63,4 +62,12 @@ public class UIManager : MonoBehaviour {
 		actionPanel.SetActive (false);
 		endPanel.SetActive (true);
 	}
+
+	//0 means demon; 1 means Janitor
+	public void GameEnds(int winner){
+		currentState = UISTATE.Endgame;
+		endPanel.GetComponent<EndPanel_UI> ().Setup (winner);
+	}
+
+
 }

@@ -5,7 +5,7 @@ public class PlayerModal : MonoBehaviour
 {
 	public float OffsetX;
 	public float OffsetY;
-	public bool enabled;
+	private bool enabled;
 
 	private GameObject actionPanel;
 	private GameObject subAttackPanel;
