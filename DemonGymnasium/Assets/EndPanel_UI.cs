@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class EndPanel_UI : MonoBehaviour {
 
-	private AudioSource AS;
-	private Text winText;
-	private Image BG;
+	public AudioSource AS;
+	public Text winText;
+	public Image BG;
 	private Image image;
 
 	public AudioClip demonWinMusic;
@@ -35,6 +35,7 @@ public class EndPanel_UI : MonoBehaviour {
 
 		//Janitor wins
 		if (winner == 0) {
+			gameObject.SetActive (true);
 			AS.Stop ();
 			AS.clip = janitorWinMusic;
 			AS.Play ();
@@ -44,6 +45,7 @@ public class EndPanel_UI : MonoBehaviour {
 		}
 		//Demon wins
 		else if (winner == 1) {
+			gameObject.SetActive (true);
 			AS.Stop ();
 			AS.clip = demonWinMusic;
 			AS.Play ();
