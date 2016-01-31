@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActionManager : MonoBehaviour {
+public class ActionManager : MonoBehaviour
+{
     public const int MOVING = 0;
     public const int SHOOT = 1;
     public const int EXPAND = 2;
@@ -9,13 +10,13 @@ public class ActionManager : MonoBehaviour {
     public GameObject holyWater;
     public GameObject fireBall;
 
-	public GameObject Demon_Expand_FX;
-	public GameObject Janitor_Expand_FX;
-	public GameObject LockUI;
+    public GameObject Demon_Expand_FX;
+    public GameObject Janitor_Expand_FX;
+    public GameObject LockUI;
     int currentActionSelected;
     Entity currentEntity;
     PlayerSelectManager playerSelectManager;
-    
+
     void Start()
     {
         currentActionSelected = -1;
@@ -53,7 +54,7 @@ public class ActionManager : MonoBehaviour {
                 GameManager.gameManager.performAction();
             }
         }
-        
+
     }
 
     void shootProjectile()
@@ -105,7 +106,7 @@ public class ActionManager : MonoBehaviour {
             for (int i = 1; i <= y - sourceY; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x, sourceY + i];
-                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
+                if (tile.getIsObstructed() || (!(isKing && i == 1) && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -121,7 +122,7 @@ public class ActionManager : MonoBehaviour {
             for (int i = 0; i < sourceY - y; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x, y + i];
-                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
+                if (tile.getIsObstructed() || (!(isKing && i == sourceY - y - 1) && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -137,7 +138,7 @@ public class ActionManager : MonoBehaviour {
             for (int i = 1; i <= x - sourceX; i++)
             {
                 Tile tile = MapGenerator.mapTiles[sourceX + i, y];
-                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
+                if (tile.getIsObstructed() || (!(isKing && i == 1) && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -153,7 +154,7 @@ public class ActionManager : MonoBehaviour {
             for (int i = 0; i < sourceX - x; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x + i, y];
-                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
+                if (tile.getIsObstructed() || (!(isKing && i == sourceX - x - 1) && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -163,7 +164,8 @@ public class ActionManager : MonoBehaviour {
             {
                 currentEntity.moveWest(sourceX - x);
             }
-        } else if (currentEntity.GetType() == typeof(King) && Mathf.Abs(sourceX - x) == Mathf.Abs(sourceY - y))
+        }
+        else if (currentEntity.GetType() == typeof(King) && Mathf.Abs(sourceX - x) == Mathf.Abs(sourceY - y))
         {
             King king = (King)currentEntity;
             if (sourceY > y && sourceX > x)
@@ -171,7 +173,7 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 0; i < sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y + i];
-                    if (tile.getIsObstructed())
+                    if (tile.getIsObstructed() || (i != sourceX - x - 1 && tile.getCurrentTileType() != type))
                     {
                         obstructed = true;
                     }
@@ -187,7 +189,7 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 0; i < sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y - i];
-                    if (tile.getIsObstructed())
+                    if (tile.getIsObstructed() || (i != sourceX - x - 1 && tile.getCurrentTileType() != type))
                     {
                         obstructed = true;
                     }
@@ -202,8 +204,8 @@ public class ActionManager : MonoBehaviour {
             {
                 for (int i = 1; i <= x - sourceX; i++)
                 {
-                    Tile tile = MapGenerator.mapTiles[x - i, y + i];
-                    if (tile.getIsObstructed())
+                    Tile tile = MapGenerator.mapTiles[sourceX + i, sourceY - i];
+                    if (tile.getIsObstructed() || (i != x - sourceX && tile.getCurrentTileType() != type))
                     {
                         obstructed = true;
                     }
@@ -218,8 +220,8 @@ public class ActionManager : MonoBehaviour {
             {
                 for (int i = 1; i <= x - sourceX; i++)
                 {
-                    Tile tile = MapGenerator.mapTiles[x - i, y - i];
-                    if (tile.getIsObstructed())
+                    Tile tile = MapGenerator.mapTiles[sourceX + i, sourceY + i];
+                    if (tile.getIsObstructed() || (i != x - sourceX && tile.getCurrentTileType() != type))
                     {
                         obstructed = true;
                     }
@@ -245,14 +247,15 @@ public class ActionManager : MonoBehaviour {
 
         return !obstructed;
     }
-    
+
 
     public bool handleAttackLogic()
     {
         currentActionSelected = -1;
-		if (playerSelectManager.currentTileSelected == null) {
-			return false;
-		}
+        if (playerSelectManager.currentTileSelected == null)
+        {
+            return false;
+        }
 
         Tile tile = playerSelectManager.currentTileSelected;
         Tile playerTile = currentEntity.getCurrentTile();
@@ -274,11 +277,12 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 1; i <= y - sourceY; i++)
                 {
                     MapGenerator.mapTiles[x, sourceY + i].setTileType(type);
-					if(currentEntity.entityType != MapGenerator.mapTiles[x,sourceY+i].currentTileType){
-						MapGenerator.mapTiles [x, sourceY+i].locked = true;
-						GameObject lockUI = (GameObject)Instantiate(LockUI);
-						lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-					}
+                    if (currentEntity.entityType != MapGenerator.mapTiles[x, sourceY + i].currentTileType)
+                    {
+                        MapGenerator.mapTiles[x, sourceY + i].locked = true;
+                        GameObject lockUI = (GameObject)Instantiate(LockUI);
+                        lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+                    }
                 }
                 return true;
             }
@@ -287,11 +291,12 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 0; i < sourceY - y; i++)
                 {
                     MapGenerator.mapTiles[x, y + i].setTileType(type);
-					if(currentEntity.entityType != MapGenerator.mapTiles[x,y+i].currentTileType){
-						MapGenerator.mapTiles [x, y+i].locked = true;
-						GameObject lockUI = (GameObject)Instantiate(LockUI);
-						lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-					}
+                    if (currentEntity.entityType != MapGenerator.mapTiles[x, y + i].currentTileType)
+                    {
+                        MapGenerator.mapTiles[x, y + i].locked = true;
+                        GameObject lockUI = (GameObject)Instantiate(LockUI);
+                        lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+                    }
                 }
                 return true;
 
@@ -301,11 +306,12 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 1; i <= x - sourceX; i++)
                 {
                     MapGenerator.mapTiles[sourceX + i, y].setTileType(type);
-					if(currentEntity.entityType != MapGenerator.mapTiles[sourceX + i, y].currentTileType){
-						MapGenerator.mapTiles [sourceX + i, y].locked = true;
-						GameObject lockUI = (GameObject)Instantiate(LockUI);
-						lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-					}
+                    if (currentEntity.entityType != MapGenerator.mapTiles[sourceX + i, y].currentTileType)
+                    {
+                        MapGenerator.mapTiles[sourceX + i, y].locked = true;
+                        GameObject lockUI = (GameObject)Instantiate(LockUI);
+                        lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+                    }
                 }
                 return true;
 
@@ -315,11 +321,12 @@ public class ActionManager : MonoBehaviour {
                 for (int i = 0; i < sourceX - x; i++)
                 {
                     MapGenerator.mapTiles[x + i, y].setTileType(type);
-					if(currentEntity.entityType != MapGenerator.mapTiles[x + i, y].currentTileType){
-						MapGenerator.mapTiles [x + i, y].locked = true;
-						GameObject lockUI = (GameObject)Instantiate(LockUI);
-						lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-					}
+                    if (currentEntity.entityType != MapGenerator.mapTiles[x + i, y].currentTileType)
+                    {
+                        MapGenerator.mapTiles[x + i, y].locked = true;
+                        GameObject lockUI = (GameObject)Instantiate(LockUI);
+                        lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+                    }
                 }
                 return true;
 
@@ -339,68 +346,74 @@ public class ActionManager : MonoBehaviour {
 
     public void handleExpandLogic()
     {
-		//0 is janitor; 1 is demon
-		GameObject newFX;
-		if (currentEntity.entityType == 0) {
-			newFX = (GameObject)Instantiate (Janitor_Expand_FX);
+        //0 is janitor; 1 is demon
+        GameObject newFX;
+        if (currentEntity.entityType == 0)
+        {
+            newFX = (GameObject)Instantiate(Janitor_Expand_FX);
 
-		} 
-		else {
-			newFX = (GameObject)Instantiate (Demon_Expand_FX);
-		}
-		newFX.GetComponent<AbilityFX> ().SetupAndPlay (currentEntity.transform);
+        }
+        else {
+            newFX = (GameObject)Instantiate(Demon_Expand_FX);
+        }
+        newFX.GetComponent<AbilityFX>().SetupAndPlay(currentEntity.transform);
 
 
         Tile[,] mapTiles = MapGenerator.mapTiles;
         int x = currentEntity.getCurrentTile().getX();
         int y = currentEntity.getCurrentTile().getY();
 
-		mapTiles [x, y].setTileType (currentEntity.entityType);
+        mapTiles[x, y].setTileType(currentEntity.entityType);
 
-		if(currentEntity.entityType != mapTiles[x,y].currentTileType){
-			mapTiles [x, y].locked = true;
-			GameObject lockUI = (GameObject)Instantiate(LockUI);
-			lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-		}
+        if (currentEntity.entityType != mapTiles[x, y].currentTileType)
+        {
+            mapTiles[x, y].locked = true;
+            GameObject lockUI = (GameObject)Instantiate(LockUI);
+            lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+        }
 
-		if (x - 1 >= 0)
+        if (x - 1 >= 0)
         {
             mapTiles[x - 1, y].setTileType(currentEntity.entityType);
 
-			if(currentEntity.entityType != mapTiles[x-1,y].currentTileType){
-				mapTiles [x - 1, y].locked = true;
-				GameObject lockUI = (GameObject)Instantiate(LockUI);
-				lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-			}
+            if (currentEntity.entityType != mapTiles[x - 1, y].currentTileType)
+            {
+                mapTiles[x - 1, y].locked = true;
+                GameObject lockUI = (GameObject)Instantiate(LockUI);
+                lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+            }
         }
         if (y - 1 >= 0)
         {
             mapTiles[x, y - 1].setTileType(currentEntity.entityType);
-			if(currentEntity.entityType != mapTiles[x,y-1].currentTileType){
-				mapTiles [x, y - 1].locked = true;
-				GameObject lockUI = (GameObject)Instantiate(LockUI);
-				lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-			}
+            if (currentEntity.entityType != mapTiles[x, y - 1].currentTileType)
+            {
+                mapTiles[x, y - 1].locked = true;
+                GameObject lockUI = (GameObject)Instantiate(LockUI);
+                lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+            }
         }
         if (x + 1 < mapTiles.GetLength(0))
         {
             mapTiles[x + 1, y].setTileType(currentEntity.entityType);
 
-			if(currentEntity.entityType != mapTiles[x+1,y].currentTileType){
-				mapTiles [x + 1, y].locked = true;
-				GameObject lockUI = (GameObject)Instantiate(LockUI);
-				lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-			}
+            if (currentEntity.entityType != mapTiles[x + 1, y].currentTileType)
+            {
+                mapTiles[x + 1, y].locked = true;
+                GameObject lockUI = (GameObject)Instantiate(LockUI);
+                lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+            }
         }
         if (y + 1 < mapTiles.GetLength(1))
         {
             mapTiles[x, y + 1].setTileType(currentEntity.entityType);
 
-			if(currentEntity.entityType != mapTiles[x,y+1].currentTileType){
-				mapTiles [x, y + 1].locked = true;
-				GameObject lockUI = (GameObject)Instantiate(LockUI);
-				lockUI.GetComponent<LockUI>().Setup (currentEntity.transform);
-			}
+            if (currentEntity.entityType != mapTiles[x, y + 1].currentTileType)
+            {
+                mapTiles[x, y + 1].locked = true;
+                GameObject lockUI = (GameObject)Instantiate(LockUI);
+                lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
+            }
         }
 
 
@@ -409,7 +422,7 @@ public class ActionManager : MonoBehaviour {
     void checkKillEnemy(Tile tile)
     {
         Entity entity = tile.getCurrentEntity();
-         if (entity == null)
+        if (entity == null)
         {
             return;
         }
