@@ -13,10 +13,38 @@ public class Tile : MonoBehaviour {
     int y;
 	Renderer rend;
 
+	public Material[] floorMaterials = new Material[5];
+
 	void Start() {
 		rend = GetComponentInChildren<Renderer> ();
         graphicTile = GetComponent<GraphicTile>();
         currentTileType = NEUTRAL;
+		PickRandomMaterialForNeutral ();
+	}
+
+	void PickRandomMaterialForNeutral(){
+		int randomNum = (int)Random.Range(0, 100);
+		int resultIndex;
+		if (randomNum >= 0 && randomNum < 60) {
+			resultIndex = 0;
+		} 
+		else if (randomNum >= 60 && randomNum < 65) {
+			resultIndex = 1;
+		} 
+		else if (randomNum >= 65 && randomNum < 90) {
+			resultIndex = 2;
+		} 
+		else if (randomNum >= 90 && randomNum < 95) {
+			resultIndex = 3;
+		} 
+		else {
+			resultIndex = 4;
+		}
+
+
+
+		rend.materials = new Material[]{floorMaterials[resultIndex]};
+		Debug.Log (resultIndex);
 	}
 
     public bool getIsObstructed()

@@ -5,10 +5,13 @@ public class GraphicTile : MonoBehaviour {
     string[] triggerNames = { "Janitor", "Demon", "Neutral"};
     Animator anim;
 
+
 	// Use this for initialization
 	void Start () {
         anim = GetComponent<Animator>();
 	}
+
+
 
     public void selectTileType(int tileType)
     {
