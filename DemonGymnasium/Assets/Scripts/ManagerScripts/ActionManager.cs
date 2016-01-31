@@ -22,9 +22,19 @@ public class ActionManager : MonoBehaviour {
         this.currentActionSelected = actionType;
     }
 
-    public void handleTileSelected()
+    void Update()
     {
 
+        if (currentActionSelected == SHOOT && Input.GetButtonDown("Fire1"))
+        {
+            playerSelectManager.mouseClicked();
+            handleAttackLogic();
+        }
+        if (currentActionSelected == MOVING && Input.GetButtonDown("Fire1"))
+        {
+            playerSelectManager.mouseClicked();
+            handleMovementLogic();
+        }
     }
 
     public void selectMovement(Entity entity)
@@ -49,13 +59,229 @@ public class ActionManager : MonoBehaviour {
 
     public void handleMovementLogic()
     {
-        
+        currentActionSelected = -1;
+        bool obstructed = false;
+        int type = (GameManager.gameManager.getPlayerTurn() ? 0 : 1);
+        Tile goalTile = playerSelectManager.currentTileSelected;
+        int sourceX = currentEntity.getCurrentTile().getX();
+        int sourceY = currentEntity.getCurrentTile().getY();
+        int x = goalTile.getX();
+        int y = goalTile.getY();
+        if (sourceX == x && sourceY < y)
+        {
+            for (int i = 1; i < y - sourceY; i++)
+            {
+                Tile tile = MapGenerator.mapTiles[x, sourceY + i];
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                currentEntity.moveNorth(y - sourceY);
+            }
+        }
+        else if (sourceX == x && sourceY > y)
+        {
+            for (int i = 1; i < sourceY - y; i++)
+            {
+                Tile tile = MapGenerator.mapTiles[x, y + i];
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                currentEntity.moveSouth(sourceY - y);
+            }
+        }
+        else if (sourceY == y && sourceX < x)
+        {
+            for (int i = 1; i < x - sourceX; i++)
+            {
+                Tile tile = MapGenerator.mapTiles[sourceX + i, y];
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                currentEntity.moveEast(x - sourceX);
+            }
+        }
+        else if (sourceY == y && sourceX > x)
+        {
+            for (int i = 1; i < sourceX - x; i++)
+            {
+                Tile tile = MapGenerator.mapTiles[x + i, y];
+                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                {
+                    obstructed = true;
+                }
+            }
+
+            if (!obstructed)
+            {
+                currentEntity.moveWest(sourceX - x);
+            }
+        } else if (currentEntity.GetType() == typeof(King) && Mathf.Abs(sourceX - x) == Mathf.Abs(sourceY - y))
+        {
+            King king = (King)currentEntity;
+            if (sourceY > y && sourceX > x)
+            {
+                for (int i = 1; i < sourceX - x; i++)
+                {
+                    Tile tile = MapGenerator.mapTiles[x + i, y + i];
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveSouthWest(sourceX - x);
+                }
+            }
+            else if (sourceY < y && sourceX > x)
+            {
+                for (int i = 1; i < sourceX - x; i++)
+                {
+                    Tile tile = MapGenerator.mapTiles[x + i, y - i];
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveNorthWest(sourceX - x);
+                }
+            }
+            else if (sourceY > y && sourceX < x)
+            {
+                for (int i = 1; i < x - sourceX; i++)
+                {
+                    Tile tile = MapGenerator.mapTiles[x - i, y + i];
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveSouthEast(x - sourceX);
+                }
+            }
+            else if (sourceY < y && sourceX < x)
+            {
+                for (int i = 1; i < x - sourceX; i++)
+                {
+                    Tile tile = MapGenerator.mapTiles[x - i, y - i];
+                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    {
+                        obstructed = true;
+                    }
+                }
+
+                if (!obstructed)
+                {
+                    king.moveNorthEast(x - sourceX);
+                }
+            }
+        }
+        else
+        {
+            obstructed = true;
+        }
+
+        if (!obstructed)
+        {
+            currentEntity.getCurrentTile().setEntity(null);
+            currentEntity.setCurrentTile(goalTile);
+            goalTile.setEntity(currentEntity);
+        }
+
+        //return !obstructed;
+    }
+    
+
+    public void handleAttackLogic()
+    {
+        currentActionSelected = -1;
+        if (playerSelectManager.currentTileSelected == null)
+        {
+            return;
+        }
+        print("Hello");
+
+        Tile tile = playerSelectManager.currentTileSelected;
+        Tile playerTile = currentEntity.getCurrentTile();
+        int sourceX = playerTile.getX();
+        int sourceY = playerTile.getY();
+        int x = tile.getX();
+        int y = tile.getY();
+        if (checkLineofSight(playerTile.getX(), playerTile.getY(), tile.getX(), tile.getY()))
+        {
+            print("CheckLineOfSight");
+            if (tile.getCurrentEntity() != null && tile.getCurrentEntity().GetType() != typeof(Obstacle))
+            {
+                damageIfEnemy(tile.getCurrentEntity());
+            }
+
+            int type = (GameManager.gameManager.getPlayerTurn() ? 0 : 1);
+
+            if (sourceX == x && sourceY < y)
+            {
+                
+                for (int i = 1; i <= y - sourceY; i++)
+                {
+                    MapGenerator.mapTiles[x, sourceY + i].setTileType(type);
+                }
+            }
+            else if (sourceX == x && sourceY > y)
+            {
+                for (int i = 0; i < sourceY - y; i++)
+                {
+                    MapGenerator.mapTiles[x, y + i].setTileType(type);
+                }
+            }
+            else if (sourceY == y && sourceX < x)
+            {
+                for (int i = 1; i <= x - sourceX; i++)
+                {
+                    MapGenerator.mapTiles[sourceX + i, y].setTileType(type);
+                }
+            }
+            else if (sourceY == y && sourceX > x)
+            {
+                for (int i = 0; i < sourceX - x; i++)
+                {
+                    MapGenerator.mapTiles[x + i, y].setTileType(type);
+                }
+            }
+
+        }
+    }
+    private void damageIfEnemy(Entity other)
+    {
+        if (other != null && other.getIsPlayer() != GameManager.gameManager.getPlayerTurn())
+        {
+            other.takeDamage();
+        }
     }
 
-    public void handleAttackLogic(Entity entity)
-    {
-        
-    }
+
+
+
 
     public void handleExpandLogic()
     {
@@ -99,6 +325,56 @@ public class ActionManager : MonoBehaviour {
             return;
         }
         entity.takeDamage();
-    } 
+    }
+
+    private bool checkLineofSight(int sourceX, int sourceY, int x, int y)
+    {
+        bool lineOfSight = true;
+        if (sourceX == x && sourceY < y && y - sourceY <= 2)
+        {
+            for (int i = 1; i < y - sourceY; i++)
+            {
+                if (MapGenerator.mapTiles[x, sourceY + i].getIsObstructed())
+                {
+                    lineOfSight = false;
+                }
+            }
+        }
+        else if (sourceX == x && sourceY > y && sourceY - y <= 2)
+        {
+            for (int i = 1; i < sourceY - y; i++)
+            {
+                if (MapGenerator.mapTiles[x, y + i].getIsObstructed())
+                {
+                    lineOfSight = false;
+                }
+            }
+        }
+        else if (sourceY == y && sourceX < x && x - sourceX <= 2)
+        {
+            for (int i = 1; i < x - sourceX; i++)
+            {
+                if (MapGenerator.mapTiles[sourceX + i, y].getIsObstructed())
+                {
+                    lineOfSight = false;
+                }
+            }
+        }
+        else if (sourceY == y && sourceX > x && sourceX - x <= 2)
+        {
+            for (int i = 1; i < sourceX - x; i++)
+            {
+                if (MapGenerator.mapTiles[x + i, y].getIsObstructed())
+                {
+                    lineOfSight = false;
+                }
+            }
+        }
+        else
+        {
+            lineOfSight = false;
+        }
+        return lineOfSight;
+    }
 
 }

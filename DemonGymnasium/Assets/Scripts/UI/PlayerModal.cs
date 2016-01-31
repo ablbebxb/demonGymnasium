@@ -145,12 +145,14 @@ public class PlayerModal : MonoBehaviour
     public void moveButtonClicked()
     {
         //GameManager.manager.setupMove();
+        actionManager.selectMovement(playerSelectManager.currentCharacterSelected);
 		Disable ();
     }
 
     public void shootButtonClicked()
     {
         //GameManager.manager.setupAttack();
+        actionManager.selectAttack(playerSelectManager.currentCharacterSelected);
 		Disable ();
     }
 

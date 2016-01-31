@@ -27,7 +27,7 @@ public class PlayerSelectManager : MonoBehaviour {
         }
     }
 
-    void mouseClicked()
+    public void mouseClicked()
     {
         resetSelection();
         currentTileSelected = null;

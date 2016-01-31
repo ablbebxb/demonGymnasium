@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
     public int currentTurn;
     public LinkedList<Entity> currentPlayers;
     public bool gameInProgress = true;
+    public static GameManager gameManager;
+
     int turnsLeft;
     int winner = -1;
     CameraManager cameraManager;
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour {
 
     void Start()
     {
+        gameManager = this;
         currentPlayers = new LinkedList<Entity>();
         currentTurn = JANITOR;
         cameraManager = GetComponent<CameraManager>();
@@ -25,9 +28,24 @@ public class GameManager : MonoBehaviour {
         turnsLeft = turnsPerPlayer;
     }
 
+    public bool getPlayerTurn()
+    {
+        return currentTurn == JANITOR;
+    }
+
     void Update()
     {
-
+        if (MapGenerator.currentTileTypes[Tile.NEUTRAL] <= 0)
+        {
+            if (MapGenerator.currentTileTypes[Tile.JANITOR] > MapGenerator.currentTileTypes[Tile.DEMON]) {
+                endGame(DEMON);
+                
+            }
+            else
+            {
+                endGame(JANITOR);
+            }
+        }
     }
 
     public void performAction()
@@ -43,9 +61,9 @@ public class GameManager : MonoBehaviour {
     {
     }
 
-    public void endGame(int id)
+    public void endGame(int idLoser)
     {
-        if (id == JANITOR)
+        if (idLoser == JANITOR)
         {
             uiManager.GameEnds(DEMON);
         }
@@ -56,6 +74,7 @@ public class GameManager : MonoBehaviour {
 
     void changeTurns()
     {
+        turnsLeft = turnsPerPlayer;
         if (currentTurn == JANITOR)
         {
             currentTurn = DEMON;
