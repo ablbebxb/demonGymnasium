@@ -385,7 +385,7 @@ public class ActionManager : MonoBehaviour
             }
 
 
-            if (currentEntity.entityType != mapTiles[x - 1, y].getCurrentEntity().entityType)
+            if (mapTiles[x - 1, y].getCurrentEntity() != null && currentEntity.entityType != mapTiles[x - 1, y].getCurrentEntity().entityType)
             {
                 checkKillEnemy(mapTiles[x - 1, y]);
             }
@@ -400,7 +400,7 @@ public class ActionManager : MonoBehaviour
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
             }
 
-            if (currentEntity.entityType != mapTiles[x, y - 1].getCurrentEntity().entityType)
+            if (mapTiles[x, y - 1].getCurrentEntity() != null && currentEntity.entityType != mapTiles[x, y - 1].getCurrentEntity().entityType)
             {
                 checkKillEnemy(mapTiles[x, y - 1]);
             }
@@ -416,7 +416,7 @@ public class ActionManager : MonoBehaviour
                 lockUI.GetComponent<LockUI>().Setup(currentEntity.transform);
             }
 
-            if (currentEntity.entityType != mapTiles[x + 1, y].getCurrentEntity().entityType)
+            if (mapTiles[x + 1, y].getCurrentEntity() != null && currentEntity.entityType != mapTiles[x + 1, y].getCurrentEntity().entityType)
             {
                 checkKillEnemy(mapTiles[x + 1, y]);
             }
@@ -433,7 +433,7 @@ public class ActionManager : MonoBehaviour
                 checkKillEnemy(mapTiles[x, y + 1]);
             }
 
-            if (currentEntity.entityType != mapTiles[x, y + 1].getCurrentEntity().entityType)
+            if (mapTiles[x, y + 1].getCurrentEntity() != null && currentEntity.entityType != mapTiles[x, y + 1].getCurrentEntity().entityType)
             {
                 checkKillEnemy(mapTiles[x, y + 1]);
 
