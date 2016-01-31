@@ -3,9 +3,11 @@ using System.Collections;
 
 public class PlayerSelectManager : MonoBehaviour {
     public Entity currentCharacterSelected;
+    public Tile currentTileSelected;
     public bool ignoreClick;
     public Color highlightColor = Color.green;
     
+
     Camera mainCamera;
     GameManager gameManager;
     PlayerModal playerModal;
@@ -28,11 +30,13 @@ public class PlayerSelectManager : MonoBehaviour {
     void mouseClicked()
     {
         resetSelection();
+        currentTileSelected = null;
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
             Tile tile = hit.collider.GetComponent<Tile>();
+            currentTileSelected = tile;
             if (tile != null)
             {
                 Entity tileEntity = tile.getCurrentEntity();
@@ -49,7 +53,7 @@ public class PlayerSelectManager : MonoBehaviour {
           
         }
         
-        //gameManager.performAction();
+        gameManager.performAction();
     }
 
     void setHighlightColor(Entity entity)

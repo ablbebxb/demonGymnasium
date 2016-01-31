@@ -7,6 +7,7 @@ public class PlayerModal : MonoBehaviour
 	public float OffsetY;
 
     PlayerSelectManager playerSelectManager;
+    ActionManager actionManager;
 	private bool enabled;
 
 	private GameObject actionPanel;
@@ -33,6 +34,7 @@ public class PlayerModal : MonoBehaviour
 		outOfAttackButton = true;
 		outOfActionPanel = true;
         playerSelectManager = GameObject.FindObjectOfType<PlayerSelectManager>();
+        actionManager = GameObject.FindObjectOfType<ActionManager>();
 	}
 
 	public void Reset(){
@@ -155,6 +157,8 @@ public class PlayerModal : MonoBehaviour
     public void expandButtonClicked()
     {
         //GameManager.manager.expand();
+
+        actionManager.selectExpand(playerSelectManager.currentCharacterSelected);
 		Disable ();
     }
 
