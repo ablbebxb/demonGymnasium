@@ -8,7 +8,7 @@ public class Minion : Entity {
 	new void Start () {
 		base.Start ();
         anim = GetComponent<Animator>();
-		GetComponentInChildren<Renderer> ().material.color = Color.yellow;
+		//GetComponentInChildren<Renderer> ().material.color = Color.yellow;
 	}
 	
 	// Update is called once per frame

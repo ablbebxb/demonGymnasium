@@ -11,16 +11,20 @@ public class MapGenerator : MonoBehaviour {
 	public Entity playerObject;
 	public int numMonsters;
 	public int numPlayers;
-	Tile[,] mapTiles;
+	public static Tile[,] mapTiles;
 
 	private Entity[] monsters;
 	private Entity[] players;
+    public static int[] currentTileTypes = new int[3];
+
 
 	void Start() {
 		mapTiles = new Tile[width, height];
 		monsters = new Entity[numMonsters];
 		players = new Entity[numPlayers];
 		generateMap();
+        updateTileScore();
+        //print(currentTileTypes[2]);
 	}
 
 	void generateMap() {
@@ -56,6 +60,27 @@ public class MapGenerator : MonoBehaviour {
 			}
 		}
 	}
+
+    public static void updateTileScore()
+    {
+        for (int k = 0; k < currentTileTypes.Length; k++)
+        {
+            currentTileTypes[k] = 0;
+        }
+        for (int i = 0; i < mapTiles.GetLength(0); i++)
+        {
+            for (int j = 0; j < mapTiles.GetLength(1); j++)
+            {
+
+                currentTileTypes[mapTiles[i, j].getCurrentTileType()]++;
+            }
+        }
+    }
+
+    public int getNumberTiles(int tileType)
+    {
+        return currentTileTypes[tileType];
+    }
 
 	public Tile getTileAtPosition(int x, int y) {
 		return mapTiles [x, y];
