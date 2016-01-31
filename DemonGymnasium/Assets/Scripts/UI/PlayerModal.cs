@@ -5,6 +5,8 @@ public class PlayerModal : MonoBehaviour
 {
 	public float OffsetX;
 	public float OffsetY;
+
+    PlayerSelectManager playerSelectManager;
 	private bool enabled;
 
 	private GameObject actionPanel;
@@ -30,6 +32,7 @@ public class PlayerModal : MonoBehaviour
 		outOfSubAttackPanel = true;
 		outOfAttackButton = true;
 		outOfActionPanel = true;
+        playerSelectManager = GameObject.FindObjectOfType<PlayerSelectManager>();
 	}
 
 	public void Reset(){
