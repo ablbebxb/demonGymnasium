@@ -9,8 +9,7 @@ public class GameManager : MonoBehaviour {
 	public float cameraTesselationRate;
     public float cameraRotationSpeed;
 	public float cameraTesselationTermination;
-	public int monsterActionsPerTurn;
-	public int playerActionsPerTurn;
+	public int actionsPerTurn;
 
 	public int monsterRange;
     public GameObject playerModal;
@@ -37,6 +36,8 @@ public class GameManager : MonoBehaviour {
 		generator = GetComponent<MapGenerator> ();
 		actionCounter = 0;
         state = 0;
+
+        
     }
 	
 	// Update is called once per frame
@@ -78,13 +79,18 @@ public class GameManager : MonoBehaviour {
 
     public void setupAttack()
     {
-        state = 2;
-        //TODO highlight possible targets
+        if (actionsPerTurn - actionCounter > 2)
+        {
+            state = 2;
+            playerModal.SetActive(false);
+            //TODO highlight possible targets
+        }
     }
 
     public void setupMove()
     {
         state = 1;
+        playerModal.SetActive(false);
         //TODO highlight possible moves
     }
 
@@ -101,22 +107,28 @@ public class GameManager : MonoBehaviour {
                 damageIfEnemy(getEntityAtPosition(x - 1, y));
                 generator.getTileAtPosition(x - 1, y).setTileType(type);
             }
-            else if (x < generator.width - 1)
+
+            if (x < generator.width - 1)
             {
                 damageIfEnemy(getEntityAtPosition(x + 1, y));
                 generator.getTileAtPosition(x + 1, y).setTileType(type);
             }
-            else if (y > 0)
+
+            if (y > 0)
             {
                 damageIfEnemy(getEntityAtPosition(x, y - 1));
                 generator.getTileAtPosition(x, y - 1).setTileType(type);
             }
-            else if (y < generator.height - 1)
+
+            if (y < generator.height - 1)
             {
                 damageIfEnemy(getEntityAtPosition(x, y + 1));
                 generator.getTileAtPosition(x, y + 1).setTileType(type);
             }
         }
+
+        recordAction();
+        state = 0;
     }
 
 	public Vector3 getSpriteRotation() {
@@ -126,7 +138,6 @@ public class GameManager : MonoBehaviour {
 			return new Vector3(mainCameraTransform.eulerAngles.x, monsterSpriteRotation, 0);
 		}
 	}
-
 
 	public void selectPlayer(Entity player) {
         if (state == 0)
@@ -141,6 +152,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void selectTile(Tile tile) {
+        if (selectedObject != null && tile.getCurrentEntity() == selectedObject)
+        {
+            state = 0;
+            selectPlayer(tile.getCurrentEntity());
+            return;
+        }
+
         if (state == 1)
         {
             if (selectedObject != null)
@@ -149,6 +167,7 @@ public class GameManager : MonoBehaviour {
                 int y = tile.getY();
                 bool acted = false;
                 Entity entityOnTile = getEntityAtPosition(x, y);
+                int type = (isHumanTurn ? 0 : 1);
                 if (x > 0 && getEntityAtPosition(x - 1, y) == selectedObject)
                 {
                     moveFromPositionToPosition(x - 1, y, x, y);
@@ -172,6 +191,7 @@ public class GameManager : MonoBehaviour {
 
                 if (acted)
                 {
+                    generator.getTileAtPosition(x, y).setTileType(type);
                     recordAction();
                 }
             }
@@ -181,8 +201,6 @@ public class GameManager : MonoBehaviour {
                 Entity source = (Entity)selectedObject;
                 int sourceX = selectedObject.getCurrentTile().getX();
                 int sourceY = selectedObject.getCurrentTile().getY();
-
-                Debug.Log("Try to hit");
 
                 int x = tile.getX();
                 int y = tile.getY();
@@ -199,34 +217,37 @@ public class GameManager : MonoBehaviour {
 
                     if (sourceX == x && sourceY < y)
                     {
-                        for (int i = 1; i < y - sourceY; i++)
+                        for (int i = 1; i <= y - sourceY; i++)
                         {
                             generator.getTileAtPosition(x, sourceY + i).setTileType(type);
                         }
                     }
                     else if (sourceX == x && sourceY > y)
                     {
-                        for (int i = 1; i < sourceY - y; i++)
+                        for (int i = 0; i < sourceY - y; i++)
                         {
                             generator.getTileAtPosition(x, y + i).setTileType(type);
                         }
                     }
                     else if (sourceY == y && sourceX < x)
                     {
-                        for (int i = 1; i < x - sourceX; i++)
+                        for (int i = 1; i <= x - sourceX; i++)
                         {
                             generator.getTileAtPosition(sourceX + i, y).setTileType(type);
                         }
                     }
                     else if (sourceY == y && sourceX > x)
                     {
-                        for (int i = 1; i < sourceX - x; i++)
+                        for (int i = 0; i < sourceX - x; i++)
                         {
                             generator.getTileAtPosition(x + i, y).setTileType(type);
                         }
                     }
 
                     recordAction();
+                    recordAction();
+
+                    state = 0;
                 }
             }
         }
@@ -271,9 +292,9 @@ public class GameManager : MonoBehaviour {
 	
 	private void recordAction() {
 		actionCounter++;
-		if (isHumanTurn && actionCounter >= playerActionsPerTurn) {
+		if (isHumanTurn && actionCounter >= actionsPerTurn) {
 			changeTurn();
-		} else if (!isHumanTurn && actionCounter >= monsterActionsPerTurn) {
+		} else if (!isHumanTurn && actionCounter >= actionsPerTurn) {
 			changeTurn();
 		}
 	}
@@ -281,7 +302,9 @@ public class GameManager : MonoBehaviour {
 	private void changeTurn() {
 		isHumanTurn = !isHumanTurn;
 		actionCounter = 0;
+        state = 0;
 		selectedObject = null;
+        playerModal.SetActive(false);
 
 		foreach (Entity monster in generator.getMonsters()) {
 			monster.reset();
@@ -319,7 +342,7 @@ public class GameManager : MonoBehaviour {
 
     private void damageIfEnemy(Entity other)
     {
-        if (other != null && other.getIsPlayer() == isHumanTurn)
+        if (other != null && other.getIsPlayer() != isHumanTurn)
         {
             other.takeDamage();
         }

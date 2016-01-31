@@ -39,7 +39,11 @@ public class Tile : MonoBehaviour {
         entity.transform.position = transform.position;
 		this.entityPresent = entity;
 		entity.setCurrentTile (this);
-	}
+        int type = (entity.getIsPlayer() ? 0 : 1);
+        graphicTile = GetComponent<GraphicTile>();
+        graphicTile.setAnim();
+        setTileType(type);
+    }
 
     public void setTileType(int tileType)
     {

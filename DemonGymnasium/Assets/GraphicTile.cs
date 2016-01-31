@@ -19,5 +19,10 @@ public class GraphicTile : MonoBehaviour {
         anim.SetTrigger(triggerNames[tileType]);
     }
 
-    
+    public void setAnim()
+    {
+        anim = GetComponent<Animator>();
+    }
+
+
 }
