@@ -15,6 +15,7 @@ public class CameraManager : MonoBehaviour {
 
     bool cameraInMotion;
     float cameraMovementTimer;
+    GameManager gameManager;
     Vector3 goalPoistion;
     Quaternion goalRotation;
     Camera mainCamera;
@@ -24,9 +25,11 @@ public class CameraManager : MonoBehaviour {
 
     void Start()
     {
+        gameManager = GetComponent<GameManager>();
         mainCamera = GameObject.FindObjectOfType<Camera>();
         cameraPositions = new Vector3[] { janitorCameraPosition, demonCameraPosition };
         cameraRotations = new Quaternion[] { Quaternion.Euler(janitorCameraRotation), Quaternion.Euler(demonCameraRotation) };
+        shiftCamera(gameManager.currentTurn);
     }
 
     void Update()

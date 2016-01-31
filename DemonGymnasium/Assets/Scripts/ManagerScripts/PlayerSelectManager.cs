@@ -30,9 +30,9 @@ public class PlayerSelectManager : MonoBehaviour {
         if (Physics.Raycast(ray, out hit))
         {
             Tile tile = hit.collider.GetComponent<Tile>();
-            if (tile != null)
+            if (tile != null )
             {
-
+                
             }
         }
     }
