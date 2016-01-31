@@ -19,7 +19,7 @@ public class PlayerModal : MonoBehaviour
 	private bool enteredActionPanel;
 
 	public void Awake(){
-		actionPanel = GetComponent<RectTransform>().Find ("ActionPanel").gameObject;
+		actionPanel = gameObject;
 		subAttackPanel = actionPanel.GetComponent<RectTransform>().Find ("SubAttackPanel").gameObject;
 		shootButton = subAttackPanel.GetComponent<RectTransform>().Find ("ShootButton").gameObject;
 		expandButton = subAttackPanel.GetComponent<RectTransform>().Find ("ExpandButton").gameObject;
