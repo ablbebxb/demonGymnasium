@@ -59,12 +59,13 @@ public class PlayerModal : MonoBehaviour
 		actionPanel.SetActive (false);
 		DisableSubAttackPanel ();
 		playerSelectManager.ignoreClick = false;
+        playerSelectManager.resetSelection();
 	}
 
 
 
 	void CheckActionPanel(){
-		if(outOfActionPanel && Input.GetMouseButtonDown(0) && enteredActionPanel){
+		if(outOfActionPanel && Input.GetMouseButtonDown(0) ){
 			enteredActionPanel = false;
 			Disable ();
 		}

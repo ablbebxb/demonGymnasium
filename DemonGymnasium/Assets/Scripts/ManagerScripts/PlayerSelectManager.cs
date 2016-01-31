@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerSelectManager : MonoBehaviour {
     public Entity currentCharacterSelected;
     public bool ignoreClick;
+    public Color highlightColor = Color.green;
     
     Camera mainCamera;
     GameManager gameManager;
@@ -26,7 +27,7 @@ public class PlayerSelectManager : MonoBehaviour {
 
     void mouseClicked()
     {
-
+        resetSelection();
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -38,20 +39,39 @@ public class PlayerSelectManager : MonoBehaviour {
                 if (tileEntity != null && tileEntity.entityType == gameManager.currentTurn)
                 {
                     currentCharacterSelected = tile.getCurrentEntity();
+                    setHighlightColor(tileEntity);
+                    tileEntity.GetComponentInChildren<SpriteRenderer>().color = Color.green;
                     playerModal.SetUIPos(tileEntity.transform);
                     playerModal.Enable();
                 }
+                
             }
+          
         }
-        else
-        {
-            resetSelection();
-        }
+        
         //gameManager.performAction();
+    }
+
+    void setHighlightColor(Entity entity)
+    {
+        if (currentCharacterSelected != null)
+        {
+            currentCharacterSelected.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        }
+        entity.GetComponentInChildren<SpriteRenderer>().color = highlightColor;
+    }
+
+    public void resetColor()
+    {
+        if (currentCharacterSelected != null)
+        {
+            currentCharacterSelected.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        }
     }
 
     public void resetSelection()
     {
+       resetColor();
         currentCharacterSelected = null;
     }
 }
