@@ -26,4 +26,24 @@ public class King : Entity {
 			GameObject.Destroy(this.gameObject);
 		}
 	}
+
+    public bool moveNorthEast()
+    {
+        return base.move(new Vector3(1, 0, 1));
+    }
+
+    public bool moveSouthEast()
+    {
+        return base.move(new Vector3(1, 0, -1));
+    }
+
+    public bool moveNorthWest()
+    {
+        return base.move(new Vector3(-1, 0, 1));
+    }
+
+    public bool moveSouthWest()
+    {
+        return base.move(new Vector3(-1, 0, -1));
+    }
 }

@@ -189,6 +189,29 @@ public class GameManager : MonoBehaviour {
                     acted = selectedObject.moveSouth();
                 }
 
+                if (selectedObject.GetType() == typeof(King))
+                {
+                    if (y < generator.height - 1 && x < generator.width - 1 && getEntityAtPosition(x + 1, y + 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x + 1, y + 1, x, y);
+                        acted = ((King)selectedObject).moveSouthWest();
+                    } else if (y < generator.height - 1 && x > 0 && getEntityAtPosition(x - 1, y + 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x - 1, y + 1, x, y);
+                        acted = ((King)selectedObject).moveSouthEast();
+                    }
+                    else if (y > 0 && x < generator.width - 1 && getEntityAtPosition(x + 1, y - 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x + 1, y - 1, x, y);
+                        acted = ((King)selectedObject).moveNorthWest();
+                    }
+                    else if (y > 0 && x > 0 && getEntityAtPosition(x - 1, y - 1) == selectedObject)
+                    {
+                        moveFromPositionToPosition(x - 1, y - 1, x, y);
+                        acted = ((King)selectedObject).moveNorthEast();
+                    }
+                }
+                
                 if (acted)
                 {
                     generator.getTileAtPosition(x, y).setTileType(type);

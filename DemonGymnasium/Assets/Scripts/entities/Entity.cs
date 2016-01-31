@@ -77,7 +77,7 @@ public abstract class Entity : MonoBehaviour {
 		return currentTile;
 	}
 
-	private bool move(Vector3 dir) {
+	protected bool move(Vector3 dir) {
 		if (isMoving) {
 			return false;
 		}
