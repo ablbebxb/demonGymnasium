@@ -67,12 +67,13 @@ public class ActionManager : MonoBehaviour {
         int sourceY = currentEntity.getCurrentTile().getY();
         int x = goalTile.getX();
         int y = goalTile.getY();
+        bool isKing = (currentEntity.GetType() == typeof(King));
         if (sourceX == x && sourceY < y)
         {
-            for (int i = 1; i < y - sourceY; i++)
+            for (int i = 1; i <= y - sourceY; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x, sourceY + i];
-                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -85,10 +86,10 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceX == x && sourceY > y)
         {
-            for (int i = 1; i < sourceY - y; i++)
+            for (int i = 1; i <= sourceY - y; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x, y + i];
-                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -101,10 +102,10 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceY == y && sourceX < x)
         {
-            for (int i = 1; i < x - sourceX; i++)
+            for (int i = 1; i <= x - sourceX; i++)
             {
                 Tile tile = MapGenerator.mapTiles[sourceX + i, y];
-                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -117,10 +118,10 @@ public class ActionManager : MonoBehaviour {
         }
         else if (sourceY == y && sourceX > x)
         {
-            for (int i = 1; i < sourceX - x; i++)
+            for (int i = 1; i <= sourceX - x; i++)
             {
                 Tile tile = MapGenerator.mapTiles[x + i, y];
-                if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                if (tile.getIsObstructed() || (!isKing && tile.getCurrentTileType() != type))
                 {
                     obstructed = true;
                 }
@@ -135,10 +136,10 @@ public class ActionManager : MonoBehaviour {
             King king = (King)currentEntity;
             if (sourceY > y && sourceX > x)
             {
-                for (int i = 1; i < sourceX - x; i++)
+                for (int i = 1; i <= sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y + i];
-                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    if (tile.getIsObstructed())
                     {
                         obstructed = true;
                     }
@@ -151,10 +152,10 @@ public class ActionManager : MonoBehaviour {
             }
             else if (sourceY < y && sourceX > x)
             {
-                for (int i = 1; i < sourceX - x; i++)
+                for (int i = 1; i <= sourceX - x; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x + i, y - i];
-                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    if (tile.getIsObstructed())
                     {
                         obstructed = true;
                     }
@@ -167,10 +168,10 @@ public class ActionManager : MonoBehaviour {
             }
             else if (sourceY > y && sourceX < x)
             {
-                for (int i = 1; i < x - sourceX; i++)
+                for (int i = 1; i <= x - sourceX; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x - i, y + i];
-                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    if (tile.getIsObstructed())
                     {
                         obstructed = true;
                     }
@@ -183,10 +184,10 @@ public class ActionManager : MonoBehaviour {
             }
             else if (sourceY < y && sourceX < x)
             {
-                for (int i = 1; i < x - sourceX; i++)
+                for (int i = 1; i <= x - sourceX; i++)
                 {
                     Tile tile = MapGenerator.mapTiles[x - i, y - i];
-                    if (tile.getIsObstructed() || tile.getCurrentTileType() != type)
+                    if (tile.getIsObstructed())
                     {
                         obstructed = true;
                     }
