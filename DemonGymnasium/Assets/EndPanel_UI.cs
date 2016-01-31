@@ -1,21 +1,45 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class EndPanel_UI : MonoBehaviour {
 
+	private Text winText;
+	private Image BG;
+	private Image image;
+
+	public string demonWinText;
+	public Sprite demonWinBG;
+	public Sprite demonWinImage;
+
+	public string janitorWinText;
+	public Sprite janitorWinBG;
+	public Sprite janitorWinImage;
 
 
 
+	public void Awake(){
+		BG = GetComponent<Image> ();
+		winText = ((RectTransform)transform).Find ("WinText").gameObject.GetComponent<Text> ();
+		image = ((RectTransform)transform).Find ("Image").gameObject.GetComponent<Image> ();
+	}
 
-	//0 means demon; 1 means Janitor
+
+	//0 means Janitor; 1 means Demon
 	public void Setup(int winner){
+
+		//Janitor wins
 		if (winner == 0) {
-
-		} 
+			winText.text = janitorWinText;
+			BG.sprite = janitorWinBG;
+			image.sprite = janitorWinImage;
+		}
+		//Demon wins
 		else if (winner == 1) {
-
+			winText.text = demonWinText;
+			BG.sprite = demonWinBG;
+			image.sprite = demonWinImage;
 		} 
 		else {
 			Debug.Log ("Unknown winner");

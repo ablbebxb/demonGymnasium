@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour {
 
     public void endGame()
     {
-        uiManager.gameEnds();
+        uiManager.GameEnds(1);
     }
 
     void changeTurns()
