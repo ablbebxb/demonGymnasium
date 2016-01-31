@@ -5,24 +5,39 @@ public class Tile : MonoBehaviour {
     public const int JANITOR = 0;
     public const int DEMON = 1;
     public const int NEUTRAL = 2;
+    public Color janitorColor = Color.blue;
+    public Color demonColor = Color.green;
 
     GraphicTile graphicTile;
     public int currentTileType = NEUTRAL;
 	Entity entityPresent;
     int x;
     int y;
-	Renderer rend;
+
+	Renderer[] rend;
 	public bool locked;
 
 
 	public Material[] floorMaterials = new Material[5];
 
 	void Start() {
-		rend = GetComponentInChildren<Renderer> ();
+		rend = GetComponentsInChildren<Renderer> ();
+        
+
+        
+
         graphicTile = GetComponent<GraphicTile>();
-        currentTileType = NEUTRAL;
 		PickRandomMaterialForNeutral ();
-	}
+        if (entityPresent)
+        {
+            currentTileType = entityPresent.entityType;
+        }
+        else
+        {
+            currentTileType = 2;
+        }
+        
+    }
 
 	void PickRandomMaterialForNeutral(){
 		int randomNum = (int)Random.Range(0, 100);
@@ -42,11 +57,16 @@ public class Tile : MonoBehaviour {
 		else {
 			resultIndex = 4;
 		}
+			
+        foreach (Renderer r in rend)
+        {
+            r.materials = new Material[] { floorMaterials[resultIndex] };
+        }
+        rend[0].material.color = janitorColor;
+        rend[1].material.color = demonColor;
+        rend[0].gameObject.SetActive(false);
+        rend[1].gameObject.SetActive(false);
 
-
-
-		rend.materials = new Material[]{floorMaterials[resultIndex]};
-		//Debug.Log (resultIndex);
 	}
 
     public bool getIsObstructed()
@@ -126,12 +146,24 @@ public class Tile : MonoBehaviour {
 	}
 
 	void OnMouseOver() {
-		rend.material.color = Color.red;
+        foreach(Renderer r in rend)
+        {
+            if (r.enabled)
+            {
+                r.material.color = Color.red;
+            }
+        }
 
 	}
 
 	void OnMouseExit() {
-		rend.material.color = Color.white;
-	}
+        foreach (Renderer r in rend)
+        {
+            if (r.enabled)
+            {
+                r.material.color = Color.white;
+            }
+        }
+    }
     
 }
