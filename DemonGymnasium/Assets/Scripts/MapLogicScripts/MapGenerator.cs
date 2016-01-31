@@ -59,7 +59,12 @@ public class MapGenerator : MonoBehaviour {
 
 			}
 		}
-	}
+        
+        mapTiles[3, 3].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[3, 5].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[5, 3].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+        mapTiles[5, 5].setInitialEntity(((GameObject)Instantiate(obstructionObject.gameObject, Vector3.zero, new Quaternion())).GetComponent<Entity>());
+    }
 
     public static void updateTileScore()
     {

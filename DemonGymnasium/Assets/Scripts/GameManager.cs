@@ -102,7 +102,7 @@ public class GameManager : MonoBehaviour {
             int y = selectedObject.getCurrentTile().getY();
             int type = (isHumanTurn ? 0 : 1);
 
-            if (x > 0)
+            if (x > 0 && )
             {
                 damageIfEnemy(getEntityAtPosition(x - 1, y));
                 generator.getTileAtPosition(x - 1, y).setTileType(type);
@@ -161,12 +161,12 @@ public class GameManager : MonoBehaviour {
 
         if (state == 1)
         {
-            if (selectedObject != null)
+            if (selectedObject != null && tile.getCurrentEntity() == null)
             {
                 int x = tile.getX();
                 int y = tile.getY();
                 bool acted = false;
-                Entity entityOnTile = getEntityAtPosition(x, y);
+
                 int type = (isHumanTurn ? 0 : 1);
                 if (x > 0 && getEntityAtPosition(x - 1, y) == selectedObject)
                 {
@@ -208,7 +208,7 @@ public class GameManager : MonoBehaviour {
                 if (checkLineofSight(sourceX, sourceY, x, y))
                 {
                     source.act();
-                    if (tile.getCurrentEntity() != null)
+                    if (tile.getCurrentEntity() != null && tile.getCurrentEntity().GetType() != typeof(Obstacle))
                     {
                         damageIfEnemy(tile.getCurrentEntity());
                     }
