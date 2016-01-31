@@ -2,7 +2,7 @@
 using System.Collections;
 
 public abstract class Entity : MonoBehaviour {
-	/**
+    /**
 	 * Directions!!
 	 * North is Z+
 	 * South is Z-
@@ -12,6 +12,7 @@ public abstract class Entity : MonoBehaviour {
 	 * Tile size is 1
 	 */
 
+    public int entityType;
 	private bool isMoving;//true while the entity is moving from one space to another
 	private Vector3 target;//the target space the entity is moving to
 	private Tile currentTile;//the current tile this entity is on
