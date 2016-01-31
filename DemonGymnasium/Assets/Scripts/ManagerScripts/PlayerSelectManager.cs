@@ -4,7 +4,7 @@ using System.Collections;
 public class PlayerSelectManager : MonoBehaviour {
     public Entity currentCharacterSelected;
     public bool ignoreClick;
-
+    
     Camera mainCamera;
     GameManager gameManager;
 
@@ -39,6 +39,7 @@ public class PlayerSelectManager : MonoBehaviour {
         {
             resetSelection();
         }
+        gameManager.performAction();
     }
 
     public void resetSelection()

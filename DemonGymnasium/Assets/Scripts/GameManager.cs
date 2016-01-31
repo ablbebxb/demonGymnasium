@@ -5,14 +5,11 @@ public class GameManager : MonoBehaviour {
     public const int JANITOR = 0;
     public const int DEMON = 1;
 
+    public int turnsPerPlayer;
+
     public int currentTurn;
     public LinkedList<Entity> currentPlayers;
-
-    public GameObject janitorMinion;
-    public GameObject janitorHero;
-    public GameObject demonMinion;
-    public GameObject demonHero;
-
+    int turnsLeft;
     CameraManager cameraManager;
 
     void Start()
@@ -20,11 +17,21 @@ public class GameManager : MonoBehaviour {
         currentPlayers = new LinkedList<Entity>();
         currentTurn = JANITOR;
         cameraManager = GetComponent<CameraManager>();
+        turnsLeft = turnsPerPlayer;
     }
 
     void Update()
     {
 
+    }
+
+    public void performAction()
+    {
+        turnsLeft--;
+        if (turnsLeft <= 0)
+        {
+            changeTurns();
+        }
     }
 
     void intializeMinionSetUp()
