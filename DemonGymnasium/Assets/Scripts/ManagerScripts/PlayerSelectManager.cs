@@ -35,6 +35,10 @@ public class PlayerSelectManager : MonoBehaviour {
                 currentCharacterSelected = tile.getCurrentEntity();
             }
         }
+        else
+        {
+            resetSelection();
+        }
     }
 
     public void resetSelection()
