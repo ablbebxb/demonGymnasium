@@ -5,6 +5,10 @@ public class ActionManager : MonoBehaviour {
     public const int MOVING = 0;
     public const int SHOOT = 1;
     public const int EXPAND = 2;
+
+    public GameObject holyWater;
+    public GameObject fireBall;
+
 	public GameObject Demon_Expand_FX;
 	public GameObject Janitor_Expand_FX;
 
@@ -33,6 +37,10 @@ public class ActionManager : MonoBehaviour {
             if (currentActionSelected == SHOOT)
             {
                 success = handleAttackLogic();
+                if (success)
+                {
+                    shootProjectile();
+                }
             }
 
             if (currentActionSelected == MOVING)
@@ -46,6 +54,19 @@ public class ActionManager : MonoBehaviour {
             }
         }
         
+    }
+
+    void shootProjectile()
+    {
+        if (currentEntity.entityType == Tile.JANITOR)
+        {
+            Projectile pro = ((GameObject)Instantiate(holyWater, currentEntity.transform.position, new Quaternion())).GetComponent<Projectile>();
+            pro.setGoalPosition(playerSelectManager.currentTileSelected.transform.position);
+        }
+        else {
+            Projectile pro = ((GameObject)Instantiate(fireBall, currentEntity.transform.position, new Quaternion())).GetComponent<Projectile>();
+            pro.setGoalPosition(playerSelectManager.currentTileSelected.transform.position);
+        }
     }
 
     public void selectMovement(Entity entity)
